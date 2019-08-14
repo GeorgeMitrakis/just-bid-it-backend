@@ -1218,17 +1218,17 @@
 												"$ref": "AAAAAAFskbyPLUqSBkc="
 											},
 											"font": "Arial;13;0",
-											"left": 656,
+											"left": 631,
 											"top": 560,
-											"width": 85.2490234375,
+											"width": 142,
 											"height": 13,
-											"alpha": 0.13992465112265184,
-											"distance": 71.7007670809734,
+											"alpha": 0.1325515148294274,
+											"distance": 75.66372975210778,
 											"hostEdge": {
 												"$ref": "AAAAAAFskbyPLUqSBkc="
 											},
 											"edgePosition": 1,
-											"text": "puts (as seller)"
+											"text": "puts (as bidder/buyer)"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -1623,11 +1623,11 @@
 										"$ref": "AAAAAAFskbdeh0nThnM="
 									},
 									"font": "Arial;13;0",
-									"left": 800,
-									"top": 720,
-									"width": 249,
-									"height": 41,
-									"text": "upon SELECT, a join is needed, because bidder rating is required"
+									"left": 752,
+									"top": 704,
+									"width": 345,
+									"height": 51,
+									"text": "upon SELECT, a join is needed, because bidder rating, bidder location (without coordinates) and bidder country are required"
 								},
 								{
 									"_type": "UMLNoteLinkView",
@@ -1643,7 +1643,7 @@
 										"$ref": "AAAAAAFskgYV2E39bjQ="
 									},
 									"lineStyle": 1,
-									"points": "924:719;923:634"
+									"points": "924:703;923:634"
 								},
 								{
 									"_type": "ERDEntityView",
@@ -2158,7 +2158,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFskbgpZ0n/Hsg="
 									},
-									"name": "puts (as seller)",
+									"name": "puts (as bidder/buyer)",
 									"end1": {
 										"_type": "ERDRelationshipEnd",
 										"_id": "AAAAAAFskbyPLUqPQGk=",
