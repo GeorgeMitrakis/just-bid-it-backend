@@ -20,6 +20,9 @@ public class RestfulApp extends Application {
 		//GET, POST (admin)
 		router.attach("/admin/users", UsersResource.class);
 
+		//GET
+		router.attach("/items", ItemsResource.class);
+
 		return router;
 	}
 

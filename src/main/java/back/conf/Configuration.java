@@ -1,7 +1,9 @@
 package back.conf;
 
+import back.data.ItemDAO;
 import back.data.UserDAO;
 import back.data.jdbc.DataAccess;
+import back.data.jdbc.ItemDAOImpl;
 import back.data.jdbc.UserDAOImpl;
 
 import java.util.Properties;
@@ -59,5 +61,9 @@ public class Configuration {
 
     public UserDAO getUserDAO() {
         return new UserDAOImpl(dataAccess);
+    }
+
+    public ItemDAO getItemDAO() {
+        return new ItemDAOImpl(dataAccess);
     }
 }
