@@ -2,27 +2,37 @@ package back.model;
 
 public class User {
 
-    private final long id;
-    private final String email;
-    private final String name;
-    private final String surname;
+    private long id;
+    private final String username;
+    private final String role;
+    private final String access;
 
-    public User(long id, String email, String name, String surname) {
+    public User(long id, String username,  String role, String access) {
         this.id = id;
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
+        this.username = username;
+        this.role = role;
+        this.access = access;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getEmail() { return email; }
-
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public String getSurname() { return surname; }
+    public String getRole() {
+        return role;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public void setId(long id){
+        this.id = id;
+    }
+
+    //TODO: method for changing access to "granted" or "denied"
 }

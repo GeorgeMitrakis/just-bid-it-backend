@@ -27,7 +27,7 @@
 #### /signup
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | {...} | {...}  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
+| POST   | username, password, password1, first_name, last_name,email, phone_number, country, location, tax_registration_number | result:{id, role, access, username, firstName, lastName,email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating}  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
 
 
 #### /admin/users

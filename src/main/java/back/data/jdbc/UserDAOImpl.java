@@ -2,6 +2,7 @@ package back.data.jdbc;
 
 import back.data.Limits;
 import back.data.UserDAO;
+import back.model.CommonUser;
 import back.model.User;
 
 import java.util.List;
@@ -23,7 +24,34 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Optional<User> getById(long id) {
-        return dataAccess.getUser(id);
+    public Optional<User> getUserById(long id) {
+        return dataAccess.getUserById(id);
+    }
+
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return dataAccess.getUserByUsername(username);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return dataAccess.getUserByEmail(email);
+    }
+
+    @Override
+    public Optional<User> getUserByPhoneNumber(String phoneNumber) {
+        return dataAccess.getUserByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public Optional<User> getUserByTRN(String TRN) {
+        return dataAccess.getUserByTRN(TRN);
+    }
+
+
+    @Override
+    public void storeUser(CommonUser commonUser, String password){
+        dataAccess.storeUser(commonUser, password);
     }
 }

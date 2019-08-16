@@ -283,7 +283,7 @@
 											"top": 269,
 											"width": 315.81591796875,
 											"height": 13,
-											"text": "casual_user"
+											"text": "common_user"
 										},
 										{
 											"_type": "ERDColumnCompartmentView",
@@ -2165,7 +2165,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFskbdeh0nSTxU="
 							},
-							"name": "casual_user",
+							"name": "common_user",
 							"ownedElements": [
 								{
 									"_type": "ERDRelationship",
