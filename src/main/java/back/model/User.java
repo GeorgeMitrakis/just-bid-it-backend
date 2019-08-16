@@ -7,7 +7,7 @@ public class User {
     private final String role;
     private final String access;
 
-    public User(long id, String username,  String role, String access) {
+    public User(long id, String username, String role, String access) {
         this.id = id;
         this.username = username;
         this.role = role;

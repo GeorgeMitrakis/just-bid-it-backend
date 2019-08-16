@@ -24,6 +24,19 @@ public class CommonUser extends  User {
         this.bidderRating = bidderRating;
     }
 
+    public CommonUser(User user, String firstName, String lastName, String email, String phoneNumber, String country, String location, String taxRegistrationNumber, int sellerRating, int bidderRating) {
+        super(user.getId(), user.getUsername(), "common user", user.getAccess());
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.country = country;
+        this.location = location;
+        this.taxRegistrationNumber = taxRegistrationNumber;
+        this.sellerRating = sellerRating;
+        this.bidderRating = bidderRating;
+    }
+
     public String getFirstName() {
         return firstName;
     }

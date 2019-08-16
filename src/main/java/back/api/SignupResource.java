@@ -30,16 +30,16 @@ public class SignupResource extends ServerResource {
         //Create a new restlet form
         Form form = new Form(entity);
         //Read the parameters
-        String username = getQueryValue("username");
-        String password = getQueryValue("password");
-        String password1 = getQueryValue("password1");
-        String firstName = getQueryValue("first_name");
-        String lastName = getQueryValue("last_name");
-        String email = getQueryValue("email");
-        String phoneNumber = getQueryValue("phone_number");
-        String country = getQueryValue("country");
-        String location = getQueryValue("location");
-        String taxRegistrationNumber = getQueryValue("tax_registration_number");
+        String username = form.getFirstValue("username");
+        String password = form.getFirstValue("password");
+        String password1 = form.getFirstValue("password1");
+        String firstName = form.getFirstValue("first_name");
+        String lastName = form.getFirstValue("last_name");
+        String email = form.getFirstValue("email");
+        String phoneNumber = form.getFirstValue("phone_number");
+        String country = form.getFirstValue("country");
+        String location = form.getFirstValue("location");
+        String taxRegistrationNumber = form.getFirstValue("tax_registration_number");
 
         //validate the values
         if ( username == null || username.equals("")

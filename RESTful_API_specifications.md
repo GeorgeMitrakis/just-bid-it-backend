@@ -21,7 +21,7 @@
 #### /login
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | {...} | {...}  |  ο χρήστης εισέρχεται στο σύστημα   |
+| POST   | username, password | result:{ value: { user information fields } }  |  ο χρήστης εισέρχεται στο σύστημα   |
 
 
 #### /signup

@@ -24,6 +24,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public Optional<User> getUserByCredentials(String username, String password){
+        return dataAccess.getUserByCredentials(username, password);
+    }
+
+    @Override
     public Optional<User> getUserById(long id) {
         return dataAccess.getUserById(id);
     }

@@ -3,6 +3,7 @@ package back.data.jdbc;
 import back.model.CommonUser;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -51,6 +52,38 @@ public class DataAccess {
     }
 
     //user resource
+
+    private Optional<User> getUserByRole(String role, Object[] par, User u) throws IncorrectResultSizeDataAccessException {
+        switch (role) {
+            case "common user":
+                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM common_user WHERE id = ?", par, new CommonUserRowMapper(u)));
+            case "admin":
+                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM administrator WHERE id = ?", par, new AdminRowMapper(u)));
+            default:
+                return Optional.empty();
+        }
+    }
+
+    public Optional<User> getUserByCredentials(String username, String hashedPassword) throws DataAccessException{
+        try {
+            String[] params = new String[]{username, hashedPassword};
+            List<User> users = jdbcTemplate.query("select * from user where (username,password) = (?,?)", params, new UserRowMapper());
+            if (users.size() == 1)  {
+                User user = users.get(0);
+                Long[] p = new Long[]{user.getId()};
+                return getUserByRole(user.getRole(), p, user);
+            }
+            else {
+                return Optional.empty();
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Failed to login");
+            e.printStackTrace();
+            throw new DataAccessException("sth failed horribly during login"){};
+        }
+    }
+
     public long countUsers() {
         return jdbcTemplate.queryForObject("select count(*) from user", Long.class);
     }
@@ -84,7 +117,7 @@ public class DataAccess {
 
     public Optional<User> getUserByEmail(String email) {
         String[] params = new String[]{email};
-        List<CommonUser> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.email = ?", params, new CommonUserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.email = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -95,7 +128,7 @@ public class DataAccess {
 
     public Optional<User> getUserByPhoneNumber(String phoneNumber) {
         String[] params = new String[]{phoneNumber};
-        List<CommonUser> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.phone_number = ?", params, new CommonUserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.phone_number = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -106,7 +139,7 @@ public class DataAccess {
 
     public Optional<User> getUserByTRN(String TRN) {
         String[] params = new String[]{TRN};
-        List<CommonUser> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.tax_registration_number = ?", params, new CommonUserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.tax_registration_number = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -127,7 +160,7 @@ public class DataAccess {
                 ps.setString(4, "pending");
                 return ps;
             }, keyHolder);
-            System.out.println(keyHolder.getKey());
+            //System.out.println(keyHolder.getKey());
             long id =  keyHolder.getKey().longValue();
             // use the same id to insert to provider
             jdbcTemplate.update("INSERT INTO common_user (id, first_name, last_name, email, phone_number, country, location, tax_registration_number, seller_rating, bidder_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, default, default)",

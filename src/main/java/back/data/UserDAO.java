@@ -10,6 +10,8 @@ public interface UserDAO {
 
     List<User> getUsers(Limits limits);
 
+    Optional<User> getUserByCredentials(String username, String password);
+
     Optional<User> getUserById(long id);
 
     Optional<User> getUserByUsername(String username);
