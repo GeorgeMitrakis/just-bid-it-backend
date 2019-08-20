@@ -2,34 +2,52 @@ package back.model;
 
 public class Item {
     private final long id;
+    private final long sellerId;
+    private final boolean running;
     private final String name;
-    private final String currentBid;
-    private final String firstBid;
+    private final float currentBid;
+    private final float firstBid;
     private final int numberOfBids;
+    private final String location;
+    private final double latitude;
+    private final double longitude;
     private final String country;
-    private final String started;
-    private final String ends;
+    private final String start;
+    private final String end;
     private final String description;
 
 
-    public Item(
-            long id,
-            String name,
-            String currentBid,
-            String firstBid,
-            int numberOfBids,
-            String country,
-            String started,
-            String ends,
-            String description) {
+    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, int numberOfBids, String location, double latitude, double longitude, String country, String start, String end, String description) {
         this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
         this.name = name;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.country = country;
-        this.started = started;
-        this.ends = ends;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
+
+    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, int numberOfBids, String location, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
+        this.name = name;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = Double.NaN;
+        this.longitude = Double.NaN;
+        this.country = country;
+        this.start = start;
+        this.end = end;
         this.description = description;
     }
 
@@ -37,15 +55,23 @@ public class Item {
         return id;
     }
 
+    public long getSellerId() {
+        return sellerId;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getCurrentBid() {
+    public float getCurrentBid() {
         return currentBid;
     }
 
-    public String getFirstBid() {
+    public float getFirstBid() {
         return firstBid;
     }
 
@@ -53,16 +79,28 @@ public class Item {
         return numberOfBids;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
     public String getCountry() {
         return country;
     }
 
-    public String getStarted() {
-        return started;
+    public String getStart() {
+        return start;
     }
 
-    public String getEnds() {
-        return ends;
+    public String getEnd() {
+        return end;
     }
 
     public String getDescription() {

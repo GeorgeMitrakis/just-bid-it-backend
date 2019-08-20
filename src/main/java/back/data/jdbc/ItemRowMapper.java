@@ -11,16 +11,37 @@ public class ItemRowMapper implements RowMapper<Item>{
     @Override
     public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        long id = rs.getLong("ItemID");
-        String name = rs.getString("Name");
-        String currentBid = rs.getString("Currently");
-        String firstBid = rs.getString("First_Bid");
-        int numberOfBids = rs.getInt("Number_of_Bids");
-        String country = rs.getString("Country");
-        String started = rs.getString("Started");
-        String ends = rs.getString("Ends");
-        String description = rs.getString("Description");
-
-        return new Item( id, name, currentBid, firstBid, numberOfBids, country, started, ends, description);
+        if(Double.isNaN(rs.getDouble("latitude")) || Double.isNaN(rs.getDouble("longitude"))){
+            return new Item(
+                    rs.getInt("id"),
+                    rs.getInt("seller_id"),
+                    rs.getBoolean("is_running"),
+                    rs.getString("name"),
+                    rs.getFloat("current_bid"),
+                    rs.getFloat("first_bid"),
+                    rs.getInt("number_of_bids"),
+                    rs.getString("location"),
+                    rs.getString("country"),
+                    rs.getString("start"),
+                    rs.getString("end"),
+                    rs.getString("description"));
+        }
+        else{
+            return new Item(
+                    rs.getInt("id"),
+                    rs.getInt("seller_id"),
+                    rs.getBoolean("is_running"),
+                    rs.getString("name"),
+                    rs.getFloat("current_bid"),
+                    rs.getFloat("first_bid"),
+                    rs.getInt("number_of_bids"),
+                    rs.getString("location"),
+                    rs.getDouble("latitude"),
+                    rs.getDouble("longitude"),
+                    rs.getString("country"),
+                    rs.getString("start"),
+                    rs.getString("end"),
+                    rs.getString("description"));
+        }
     }
 }

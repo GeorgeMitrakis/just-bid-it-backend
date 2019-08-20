@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ItemDAO {
 
-    List<Item> getItems(Limits limits);
+    List<Item> getItems(int userId, Limits limits);
 
     Optional<Item> getById(long id);
 }

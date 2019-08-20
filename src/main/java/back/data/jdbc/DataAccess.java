@@ -175,17 +175,17 @@ public class DataAccess {
 
     //items resource
     public long countItems() {
-        return jdbcTemplate.queryForObject("select count(*) from items", Long.class);
+        return jdbcTemplate.queryForObject("select count(*) from item", Long.class);
     }
 
-    public List<Item> getItems(long start, long count) {
-        Long[] params = new Long[]{start, count};
-        return jdbcTemplate.query("select * from items limit ?, ?", params, new ItemRowMapper());
+    public List<Item> getItems(int userId, long start, long count) {
+        Long[] params = new Long[]{(long) userId, start, count};
+        return jdbcTemplate.query("select * from item where seller_id = ? limit ?, ?", params, new ItemRowMapper());
     }
 
     public Optional<Item> getItem(Long id) {
         Long[] params = new Long[]{id};
-        List<Item> items = jdbcTemplate.query("select * from items where id = ?", params, new ItemRowMapper());
+        List<Item> items = jdbcTemplate.query("select * from item where id = ?", params, new ItemRowMapper());
         if (items.size() == 1)  {
             return Optional.of(items.get(0));
         }
