@@ -33,8 +33,8 @@ public class SignupResource extends ServerResource {
         String username = form.getFirstValue("username");
         String password = form.getFirstValue("password");
         String password1 = form.getFirstValue("password1");
-        String firstName = form.getFirstValue("first_name");
-        String lastName = form.getFirstValue("last_name");
+        String firstname = form.getFirstValue("firstname");
+        String lastname = form.getFirstValue("lastname");
         String email = form.getFirstValue("email");
         String phoneNumber = form.getFirstValue("phone_number");
         String country = form.getFirstValue("country");
@@ -45,8 +45,8 @@ public class SignupResource extends ServerResource {
         if ( username == null || username.equals("")
             ||password == null || password.equals("")
             ||password1 == null || password1.equals("")
-            ||firstName == null || firstName.equals("")
-            ||lastName == null || lastName.equals("")
+            ||firstname == null || firstname.equals("")
+            ||lastname == null || lastname.equals("")
             ||email == null || email.equals("")
             ||phoneNumber == null || phoneNumber.equals("")
             ||country == null || country.equals("")
@@ -75,7 +75,7 @@ public class SignupResource extends ServerResource {
         password = Hashing.getHashSHA256(password);
 
         //use the DAO machinery to add the new user
-        CommonUser commonUser = new CommonUser(0,username, "pending", firstName, lastName, email, phoneNumber,country,location, taxRegistrationNumber, 0, 0);
+        CommonUser commonUser = new CommonUser(0,username, "pending", firstname, lastname, email, phoneNumber,country,location, taxRegistrationNumber, 0, 0);
         try{
             userDAO.storeUser(commonUser, password);
         }

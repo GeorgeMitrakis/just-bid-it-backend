@@ -164,7 +164,7 @@ public class DataAccess {
             long id =  keyHolder.getKey().longValue();
             // use the same id to insert to provider
             jdbcTemplate.update("INSERT INTO common_user (id, first_name, last_name, email, phone_number, country, location, tax_registration_number, seller_rating, bidder_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, default, default)",
-                    id, commonUser.getFirstName(), commonUser.getLastName(), commonUser.getEmail(), commonUser.getPhoneNumber(), commonUser.getCountry(), commonUser.getLocation(), commonUser.getTaxRegistrationNumber());
+                    id, commonUser.getFirstname(), commonUser.getLastname(), commonUser.getEmail(), commonUser.getPhoneNumber(), commonUser.getCountry(), commonUser.getLocation(), commonUser.getTaxRegistrationNumber());
             commonUser.setId(id);
         } catch (Exception e) {
             System.err.println("Failed to store common user");

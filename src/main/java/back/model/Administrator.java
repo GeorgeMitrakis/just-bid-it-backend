@@ -1,26 +1,26 @@
 package back.model;
 
 public class Administrator extends  User {
-    private final String firstName;
-    private final String lastName;
+    private final String firstname;
+    private final String lastname;
 
-    public Administrator(long id, String username, String access, String firstName, String lastName) {
+    public Administrator(long id, String username, String access, String firstname, String lastname) {
         super(id, username, "administrator", access);
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
-    public Administrator(User user, String firstName, String lastName) {
+    public Administrator(User user, String firstname, String lastname) {
         super(user.getId(), user.getUsername(), "administrator", user.getAccess());
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 }
