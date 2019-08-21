@@ -46,7 +46,7 @@
 #### /items
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | userId | {total, start, count, results:[]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
+| GET    | userId | {total, start, count, results:{}}  |  ο χρήστης παίρνει τα αντικείμενά του   |
 | POST   | {...} | {...}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 

@@ -3,11 +3,23 @@ package back.api;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
+import org.restlet.service.CorsService;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * The Restlet App, mapping URL patterns to ServerSideResources.
  */
 public class RestfulApp extends Application {
+
+	public RestfulApp() {
+		super();
+		CorsService corsService = new CorsService();
+		corsService.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
+		corsService.setAllowedCredentials(true);
+		getServices().add(corsService);
+	}
 
 	@Override
 	public synchronized Restlet createInboundRoot() {
