@@ -56,9 +56,9 @@ public class DataAccess {
     private Optional<User> getUserByRole(String role, Object[] par, User u) throws IncorrectResultSizeDataAccessException {
         switch (role) {
             case "common user":
-                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM common_user WHERE id = ?", par, new CommonUserRowMapper(u)));
+                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM just_bid_it.common_user WHERE id = ?", par, new CommonUserRowMapper(u)));
             case "admin":
-                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM administrator WHERE id = ?", par, new AdminRowMapper(u)));
+                return Optional.of(jdbcTemplate.queryForObject("SELECT * FROM just_bid_it.administrator WHERE id = ?", par, new AdminRowMapper(u)));
             default:
                 return Optional.empty();
         }
@@ -67,7 +67,7 @@ public class DataAccess {
     public Optional<User> getUserByCredentials(String username, String hashedPassword) throws DataAccessException{
         try {
             String[] params = new String[]{username, hashedPassword};
-            List<User> users = jdbcTemplate.query("select * from user where (username,password) = (?,?)", params, new UserRowMapper());
+            List<User> users = jdbcTemplate.query("select * from just_bid_it.user where (username,password) = (?,?)", params, new UserRowMapper());
             if (users.size() == 1)  {
                 User user = users.get(0);
                 Long[] p = new Long[]{user.getId()};
@@ -85,17 +85,17 @@ public class DataAccess {
     }
 
     public long countUsers() {
-        return jdbcTemplate.queryForObject("select count(*) from user", Long.class);
+        return jdbcTemplate.queryForObject("select count(*) from just_bid_it.user", Long.class);
     }
 
     public List<User> getUsers(long start, long count) {
         Long[] params = new Long[]{start, count};
-        return jdbcTemplate.query("select * from user limit ?, ?", params, new UserRowMapper());
+        return jdbcTemplate.query("select * from just_bid_it.user limit ?, ?", params, new UserRowMapper());
     }
 
     public Optional<User> getUserById(Long id) {
         Long[] params = new Long[]{id};
-        List<User> users = jdbcTemplate.query("select * from user where id = ?", params, new UserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user where id = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -106,7 +106,7 @@ public class DataAccess {
 
     public Optional<User> getUserByUsername(String username) {
         String[] params = new String[]{username};
-        List<User> users = jdbcTemplate.query("select * from user where username = ?", params, new UserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user where username = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -117,7 +117,7 @@ public class DataAccess {
 
     public Optional<User> getUserByEmail(String email) {
         String[] params = new String[]{email};
-        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.email = ?", params, new UserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user, just_bid_it.common_user where user.id=common_user.id and common_user.email = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -128,7 +128,7 @@ public class DataAccess {
 
     public Optional<User> getUserByPhoneNumber(String phoneNumber) {
         String[] params = new String[]{phoneNumber};
-        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.phone_number = ?", params, new UserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user, just_bid_it.common_user where user.id=common_user.id and common_user.phone_number = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -139,7 +139,7 @@ public class DataAccess {
 
     public Optional<User> getUserByTRN(String TRN) {
         String[] params = new String[]{TRN};
-        List<User> users = jdbcTemplate.query("select * from user, common_user where user.id=common_user.id and common_user.tax_registration_number = ?", params, new UserRowMapper());
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user, just_bid_it.common_user where user.id=common_user.id and common_user.tax_registration_number = ?", params, new UserRowMapper());
         if (users.size() == 1)  {
             return Optional.of(users.get(0));
         }
@@ -153,7 +153,7 @@ public class DataAccess {
             // insert into user and keep id
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO user(id, username, password, role, access) VALUES (default, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.user(id, username, password, role, access) VALUES (default, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, commonUser.getUsername());
                 ps.setString(2, hashedPassword);
                 ps.setString(3, "common user");
@@ -163,7 +163,7 @@ public class DataAccess {
             //System.out.println(keyHolder.getKey());
             long id =  keyHolder.getKey().longValue();
             // use the same id to insert to provider
-            jdbcTemplate.update("INSERT INTO common_user (id, first_name, last_name, email, phone_number, country, location, tax_registration_number, seller_rating, bidder_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, default, default)",
+            jdbcTemplate.update("INSERT INTO just_bid_it.common_user (id, first_name, last_name, email, phone_number, country, location, tax_registration_number, seller_rating, bidder_rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, default, default)",
                     id, commonUser.getFirstname(), commonUser.getLastname(), commonUser.getEmail(), commonUser.getPhoneNumber(), commonUser.getCountry(), commonUser.getLocation(), commonUser.getTaxRegistrationNumber());
             commonUser.setId(id);
         } catch (Exception e) {
@@ -175,22 +175,92 @@ public class DataAccess {
 
     //items resource
     public long countItems() {
-        return jdbcTemplate.queryForObject("select count(*) from item", Long.class);
+        return jdbcTemplate.queryForObject("select count(*) from just_bid_it.item", Long.class);
     }
 
     public List<Item> getItems(int userId, long start, long count) {
         Long[] params = new Long[]{(long) userId, start, count};
-        return jdbcTemplate.query("select * from item where seller_id = ? limit ?, ?", params, new ItemRowMapper());
+        return jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper());
     }
 
     public Optional<Item> getItem(Long id) {
         Long[] params = new Long[]{id};
-        List<Item> items = jdbcTemplate.query("select * from item where id = ?", params, new ItemRowMapper());
+        List<Item> items = jdbcTemplate.query("select * from just_bid_it.item where id = ?", params, new ItemRowMapper());
         if (items.size() == 1)  {
             return Optional.of(items.get(0));
         }
         else {
             return Optional.empty();
+        }
+    }
+
+    public void storeItem(Item item){
+        try{
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            if(Double.isNaN(item.getLatitude()) || Double.isNaN(item.getLongitude())){
+                jdbcTemplate.update(connection -> {
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, is_running, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    ps.setLong(1, item.getSellerId());
+                    ps.setBoolean(2, item.isRunning());
+                    ps.setString(3, item.getName());
+                    ps.setFloat(4, item.getCurrentBid());
+                    ps.setFloat(5, item.getFirstBid());
+                    ps.setFloat(6, item.getBuyPrice());
+                    ps.setInt(7, item.getNumberOfBids());
+                    ps.setString(8, item.getLocation());
+                    ps.setString(9, item.getCountry());
+                    ps.setString(10, item.getStart());
+                    ps.setString(11, item.getEnd());
+                    ps.setString(12, item.getDescription());
+                    return ps;
+                },keyHolder);
+            }
+            else{
+                jdbcTemplate.update(connection -> {
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, is_running, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    ps.setLong(1, item.getSellerId());
+                    ps.setBoolean(2, item.isRunning());
+                    ps.setString(3, item.getName());
+                    ps.setFloat(4, item.getCurrentBid());
+                    ps.setFloat(5, item.getFirstBid());
+                    ps.setFloat(6, item.getBuyPrice());
+                    ps.setInt(7, item.getNumberOfBids());
+                    ps.setString(8, item.getLocation());
+                    ps.setDouble(9, item.getLatitude());
+                    ps.setDouble(10, item.getLongitude());
+                    ps.setString(11, item.getCountry());
+                    ps.setString(12, item.getStart());
+                    ps.setString(13, item.getEnd());
+                    ps.setString(14, item.getDescription());
+                    return ps;
+                },keyHolder);
+            }
+
+
+            long id =  keyHolder.getKey().longValue();
+            item.setId(id);
+
+        }
+        catch (Exception e) {
+            System.err.println("Failed to store item");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert item"){};
+        }
+    }
+
+    public void storeItemCategories(long itemId, List<String> categories){
+        try{
+            for(int i=0; i<categories.size() ; i++){
+                jdbcTemplate.update("INSERT IGNORE INTO just_bid_it.category(id, name) VALUES (default, ?) ",
+                        categories.get(i));
+                jdbcTemplate.update("INSERT INTO just_bid_it.item_categories(item_id, category) VALUES (?, ?) ",
+                        itemId, categories.get(i));
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Failed to store categories");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert categories"){};
         }
     }
 }

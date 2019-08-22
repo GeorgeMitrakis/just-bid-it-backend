@@ -10,4 +10,8 @@ public interface ItemDAO {
     List<Item> getItems(int userId, Limits limits);
 
     Optional<Item> getById(long id);
+
+    void storeItem(Item item);
+
+    void storeItemCategories(long itemId, List<String> categories);
 }

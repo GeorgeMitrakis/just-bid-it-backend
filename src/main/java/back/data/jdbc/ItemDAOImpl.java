@@ -28,4 +28,14 @@ public class ItemDAOImpl implements ItemDAO {
     public Optional<Item> getById(long id) {
         return dataAccess.getItem(id);
     }
+
+    @Override
+    public void storeItem(Item item){
+        dataAccess.storeItem(item);
+    }
+
+    @Override
+    public void storeItemCategories(long itemId, List<String> categories){
+        dataAccess.storeItemCategories(itemId, categories);
+    }
 }

@@ -1,12 +1,13 @@
 package back.model;
 
 public class Item {
-    private final long id;
+    private long id;
     private final long sellerId;
     private final boolean running;
     private final String name;
     private final float currentBid;
     private final float firstBid;
+    private final float buyPrice;
     private final int numberOfBids;
     private final String location;
     private final double latitude;
@@ -17,13 +18,14 @@ public class Item {
     private final String description;
 
 
-    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, int numberOfBids, String location, double latitude, double longitude, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, double latitude, double longitude, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
         this.location = location;
         this.latitude = latitude;
@@ -34,13 +36,14 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, float currentBid, float firstBid, float buyPrice,  int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
         this.location = location;
         this.latitude = Double.NaN;
@@ -49,6 +52,10 @@ public class Item {
         this.start = start;
         this.end = end;
         this.description = description;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getId() {
@@ -73,6 +80,10 @@ public class Item {
 
     public float getFirstBid() {
         return firstBid;
+    }
+
+    public float getBuyPrice() {
+        return buyPrice;
     }
 
     public int getNumberOfBids() {

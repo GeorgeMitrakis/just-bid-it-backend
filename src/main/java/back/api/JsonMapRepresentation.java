@@ -1,6 +1,7 @@
 package back.api;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
 
@@ -20,7 +21,7 @@ public class JsonMapRepresentation extends WriterRepresentation {
 
     @Override
     public void write(Writer writer) throws IOException {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
         writer.write(gson.toJson(map));
     }
 

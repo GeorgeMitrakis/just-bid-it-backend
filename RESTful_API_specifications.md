@@ -47,7 +47,7 @@
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | userId | {total, start, count, results:{}}  |  ο χρήστης παίρνει τα αντικείμενά του   |
-| POST   | {...} | {...}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
+| POST   | userId, name, buy_price, first_bid, location, country, end, description, [latitude, longitude] | {..pending...}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 
 #### /items/{id}
