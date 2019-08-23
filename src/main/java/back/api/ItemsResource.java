@@ -52,7 +52,7 @@ public class ItemsResource extends ServerResource {
         // categories
         ArrayList<String> categories = new ArrayList<>();
         for (int i=0; i<form.size() ; i++){
-            if(form.get(i).getName().equals("categories[]")){
+            if(form.get(i).getName().contains("categories")){
                 System.err.println(form.get(i).getValue());
                 categories.add(form.get(i).getValue());
             }
@@ -81,22 +81,27 @@ public class ItemsResource extends ServerResource {
         float buyPrice = Float.parseFloat(form.getFirstValue("buy_price"));
         float firstBid = Float.parseFloat(form.getFirstValue("first_bid"));
         String location = form.getFirstValue("location");
-        double latitude = ((!(form.getFirstValue("latitude") == null)) && (!(form.getFirstValue("latitude").isEmpty()))) ? Double.parseDouble(form.getFirstValue("latitude")) : Double.NaN;
-        double longitude = ((!(form.getFirstValue("longitude") == null)) && (!(form.getFirstValue("longitude").isEmpty())))? Double.parseDouble(form.getFirstValue("longitude")) : Double.NaN;
+        Double latitude = null;
+        Double longitude = null;
         String country = form.getFirstValue("country");
 
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String start = myDateObj.format(myFormatObj);//start time
-        String end = form.getFirstValue("end");//end time
+        String end = LocalDateTime.parse(form.getFirstValue("end")).format(myFormatObj).toString();//end time
         String description = form.getFirstValue("description");
 
-        if(Double.isNaN(latitude) || Double.isNaN(longitude)){
+        if(form.getFirstValue("latitude") == null || form.getFirstValue("latitude").equals("")
+                ||form.getFirstValue("longitude") == null || form.getFirstValue("longitude").equals("")){
             System.err.println("coordinates are not given.");
         }
+        else{
+            latitude = Double.parseDouble(form.getFirstValue("latitude"));
+            longitude = Double.parseDouble(form.getFirstValue("longitude"));
+        }
 
-        Item item = new Item(0, userId, true, name, firstBid, firstBid, buyPrice, 0, location, latitude, longitude, country, start,end, description);
+        Item item = new Item(0, userId, true, name, categories, firstBid, firstBid, buyPrice, 0, location, latitude, longitude, country, start,end, description);
         try{
             itemDAO.storeItem(item);
         }
@@ -104,16 +109,16 @@ public class ItemsResource extends ServerResource {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "item insertion in database failed");
         }
 
-        try{
-            itemDAO.storeItemCategories(item.getId(), categories);
-        }
-        catch (DataAccessException e){
-            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "categories insertion in database failed");
-        }
+//        try{
+//            itemDAO.storeItemCategories(item.getId());
+//        }
+//        catch (DataAccessException e){
+//            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "categories insertion in database failed");
+//        }
 
         Map<String, Object> map = new HashMap<>();
+
         map.put("item", item);
-        map.put("categories", categories.toArray());
         return new JsonMapRepresentation(map);
     }
 }

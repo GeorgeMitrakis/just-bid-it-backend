@@ -180,24 +180,36 @@ public class DataAccess {
 
     public List<Item> getItems(int userId, long start, long count) {
         Long[] params = new Long[]{(long) userId, start, count};
-        return jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper());
+        Long[] categoryParams = new Long[1];
+        List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper(null));
+        List<String> categories;
+        for(int i=0 ; i<items.size() ; i++){
+            categoryParams[0] = items.get(i).getId();
+            categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
+            items.get(i).setCategories(categories);
+        }
+
+        return items;
     }
 
     public Optional<Item> getItem(Long id) {
         Long[] params = new Long[]{id};
-        List<Item> items = jdbcTemplate.query("select * from just_bid_it.item where id = ?", params, new ItemRowMapper());
-        if (items.size() == 1)  {
-            return Optional.of(items.get(0));
-        }
-        else {
+        List<String> categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", params, new ItemCategoriesRowMapper());
+        if (categories.size() != 1){
             return Optional.empty();
         }
+        List<Item> items = jdbcTemplate.query("select * from just_bid_it.item where id = ?", params, new ItemRowMapper(categories));
+        if (items.size() != 1) {
+            return Optional.empty();
+        }
+
+        return Optional.of(items.get(0));
     }
 
     public void storeItem(Item item){
-        try{
+        try{//try storing the item itself
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            if(Double.isNaN(item.getLatitude()) || Double.isNaN(item.getLongitude())){
+            if((item.getLatitude() == null) || (item.getLongitude()==null)){
                 jdbcTemplate.update(connection -> {
                     PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, is_running, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     ps.setLong(1, item.getSellerId());
@@ -246,10 +258,11 @@ public class DataAccess {
             e.printStackTrace();
             throw new DataAccessException("could not insert item"){};
         }
-    }
 
-    public void storeItemCategories(long itemId, List<String> categories){
-        try{
+
+        try{//try storing its categories
+            long itemId = item.getId();
+            List<String> categories = item.getCategories();
             for(int i=0; i<categories.size() ; i++){
                 jdbcTemplate.update("INSERT IGNORE INTO just_bid_it.category(id, name) VALUES (default, ?) ",
                         categories.get(i));

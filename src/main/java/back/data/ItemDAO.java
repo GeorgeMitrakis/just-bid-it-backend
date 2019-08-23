@@ -13,5 +13,5 @@ public interface ItemDAO {
 
     void storeItem(Item item);
 
-    void storeItemCategories(long itemId, List<String> categories);
+    //void storeItemCategories(long itemId);
 }

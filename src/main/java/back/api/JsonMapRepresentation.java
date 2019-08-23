@@ -21,7 +21,10 @@ public class JsonMapRepresentation extends WriterRepresentation {
 
     @Override
     public void write(Writer writer) throws IOException {
-        Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+        Gson gson = new GsonBuilder()
+                .serializeSpecialFloatingPointValues()
+                .serializeNulls()
+                .create();
         writer.write(gson.toJson(map));
     }
 
