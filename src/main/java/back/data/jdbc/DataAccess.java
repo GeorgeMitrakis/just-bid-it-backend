@@ -5,17 +5,13 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import back.data.Limits;
 import back.model.User;
 import back.model.Item;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
-import java.math.BigInteger;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -274,6 +270,19 @@ public class DataAccess {
             System.err.println("Failed to store categories");
             e.printStackTrace();
             throw new DataAccessException("could not insert categories"){};
+        }
+    }
+
+    //category autocomplete search resource
+    public List<String> getCategoryNamesByStartOfName(String substring) throws DataAccessException{
+        try{
+            String[] params = new String[]{substring+"%"};
+            return jdbcTemplate.query("SELECT name from just_bid_it.category where name like ?", params, new CategoryRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to search for categories");
+            e.printStackTrace();
+            throw new DataAccessException("could not search for categories"){};
         }
     }
 }

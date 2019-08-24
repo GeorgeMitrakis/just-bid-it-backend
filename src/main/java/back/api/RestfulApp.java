@@ -38,6 +38,9 @@ public class RestfulApp extends Application {
 //		//GET
 //		router.attach("/search", );
 
+		//GET
+		router.attach("/categories", CategoriesAutocompleteResource.class);
+
 //		//GET, POST (admin)
 //		router.attach("/admin/users", );
 
