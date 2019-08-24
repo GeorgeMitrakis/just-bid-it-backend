@@ -75,6 +75,11 @@
 | ------ | ----- | ------ | ------ |
 | GET    | {page number, page size, +++} | {...}  |  αναζήτηση ενεργών δημοπρασιών   |
 
+#### /categories
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| GET    | category | categories:[]  |  αναζήτηση κατηγοριών με το input string ως πρόθεμα   |
+
 
 #### /bids
 | Method | Input | Output | Action |
