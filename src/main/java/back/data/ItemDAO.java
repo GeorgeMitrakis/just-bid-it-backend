@@ -14,4 +14,6 @@ public interface ItemDAO {
     void storeItem(Item item);
 
     //void storeItemCategories(long itemId);
+
+    List<Item> searchItems(String searchTerm, String category);
 }

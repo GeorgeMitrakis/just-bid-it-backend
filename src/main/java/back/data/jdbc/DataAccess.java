@@ -285,4 +285,27 @@ public class DataAccess {
             throw new DataAccessException("could not search for categories"){};
         }
     }
+
+    //item search
+    //TODO: proper full-text search query
+    public List<Item> searchItems(String searchTerm, String category) throws DataAccessException{
+        try{
+            //String[] params = new String[]{searchTerm, category};
+            Long[] categoryParams = new Long[1];
+            List<String> categories;
+            List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
+            for(int i=0 ; i<items.size() ; i++){
+                categoryParams[0] = items.get(i).getId();
+                categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
+                items.get(i).setCategories(categories);
+            }
+
+            return items;
+        }
+        catch(Exception e) {
+            System.err.println("Failed to search for items");
+            e.printStackTrace();
+            throw new DataAccessException("could not search for items"){};
+        }
+    }
 }
