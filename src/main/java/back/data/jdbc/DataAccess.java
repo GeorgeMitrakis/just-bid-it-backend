@@ -1,5 +1,6 @@
 package back.data.jdbc;
 
+import back.model.Bid;
 import back.model.CommonUser;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
@@ -188,12 +189,14 @@ public class DataAccess {
         return items;
     }
 
-    public Optional<Item> getItem(Long id) {
+    public Optional<Item> getItemById(Long id) {
         Long[] params = new Long[]{id};
+        //bring the item's categories
         List<String> categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", params, new ItemCategoriesRowMapper());
-        if (categories.size() != 1){
+        if (categories.size() == 0){
             return Optional.empty();
         }
+        //append them to the item
         List<Item> items = jdbcTemplate.query("select * from just_bid_it.item where id = ?", params, new ItemRowMapper(categories));
         if (items.size() != 1) {
             return Optional.empty();
@@ -273,6 +276,31 @@ public class DataAccess {
         }
     }
 
+    public void closeAuction(long itemId) throws DataAccessException{
+
+        try{
+            jdbcTemplate.update("update just_bid_it.item set is_running = false where id = ?", itemId);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to close auction");
+            e.printStackTrace();
+            throw new DataAccessException("could not close auction"){};
+        }
+
+    }
+
+    public void updateCurrentBid(long itemId, float amount) throws DataAccessException{
+        try{
+            jdbcTemplate.update("update just_bid_it.item set current_bid = ? where id = ?",
+                    amount, itemId);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to update current_bid in item");
+            e.printStackTrace();
+            throw new DataAccessException("could not update current_bid in item"){};
+        }
+    }
+
     //category autocomplete search resource
     public List<String> getCategoryNamesByStartOfName(String substring) throws DataAccessException{
         try{
@@ -307,5 +335,29 @@ public class DataAccess {
             e.printStackTrace();
             throw new DataAccessException("could not search for items"){};
         }
+    }
+
+    //bid item
+    public void storeBid(Bid bid) throws DataAccessException{
+        try{
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(
+                        "insert into just_bid_it.bid(id, item_id, bidder_id, time, amount) VALUES (default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setLong(1, bid.getItemId());
+                ps.setLong(2, bid.getBidderId());
+                ps.setString(3,bid.getTime());
+                ps.setFloat(4, bid.getAmount());
+                return ps;
+            },keyHolder);
+            long id =  keyHolder.getKey().longValue();
+            bid.setId(id);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to insert bid in the database");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert bid in the database"){};
+        }
+
     }
 }

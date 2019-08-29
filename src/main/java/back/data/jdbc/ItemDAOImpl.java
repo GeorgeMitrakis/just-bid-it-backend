@@ -25,8 +25,8 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public Optional<Item> getById(long id) {
-        return dataAccess.getItem(id);
+    public Optional<Item> getItemById(long id) {
+        return dataAccess.getItemById(id);
     }
 
     @Override
@@ -42,5 +42,15 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public List<Item> searchItems(String searchTerm, String category){
         return dataAccess.searchItems(searchTerm, category);
+    }
+
+    @Override
+    public void closeAuction(long itemId){
+        dataAccess.closeAuction(itemId);
+    }
+
+    @Override
+    public void updateCurrentBid(long itemId, float amount){
+        dataAccess.updateCurrentBid(itemId, amount);
     }
 }

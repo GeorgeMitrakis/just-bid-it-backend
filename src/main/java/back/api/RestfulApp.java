@@ -53,8 +53,8 @@ public class RestfulApp extends Application {
 //		//GET, PUT, DELETE (common user)
 //		router.attach("/items/{id}", );
 
-//		//POST (common user)
-//		router.attach("/items/{id}/bid", );
+		//POST (common user)
+		router.attach("/items/{id}/bid", ItemBidResource.class);
 
 //		//POST (common user)
 //		router.attach("/items/{id}/buy", );

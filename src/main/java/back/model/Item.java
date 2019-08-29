@@ -5,13 +5,13 @@ import java.util.List;
 public class Item {
     private long id;
     private final long sellerId;
-    private final boolean running;
+    private boolean running;
     private final String name;
     private List<String> categories;
-    private final float currentBid;
+    private float currentBid;
     private final float firstBid;
     private final float buyPrice;
-    private final int numberOfBids;
+    private int numberOfBids;
     private final String location;
     private final Double latitude;
     private final Double longitude;
@@ -65,8 +65,20 @@ public class Item {
         this.id = id;
     }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public void setCurrentBid(float currentBid) {
+        this.currentBid = currentBid;
+    }
+
+    public void setNumberOfBids(int numberOfBids) {
+        this.numberOfBids = numberOfBids;
     }
 
     public long getId() {
