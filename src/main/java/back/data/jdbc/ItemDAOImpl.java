@@ -44,10 +44,10 @@ public class ItemDAOImpl implements ItemDAO {
         return dataAccess.searchItems(searchTerm, category);
     }
 
-    @Override
-    public void closeAuction(long itemId){
-        dataAccess.closeAuction(itemId);
-    }
+//    @Override
+//    public void closeAuction(long itemId){
+//        dataAccess.closeAuction(itemId);
+//    }
 
     @Override
     public void updateCurrentBid(long itemId, float amount){

@@ -61,12 +61,6 @@ public class ItemBidResource extends ServerResource {
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String time = myDateObj.format(myFormatObj);
 
-        if(time.compareTo(item.getEnd())>0){
-            //item.setRunning(false);
-            itemDAO.closeAuction(item.getId());
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "item auction is completed");
-        }
-
         //create new bid object
         Bid bid = new Bid(0, itemId, bidderId, time, amount);
 
@@ -78,12 +72,11 @@ public class ItemBidResource extends ServerResource {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "bid insertion in database failed");
         }
 
-        //update item status
+        //update item current bid
         try{
             itemDAO.updateCurrentBid(itemId, bid.getAmount());
             if(item.getBuyPrice() <= bid.getAmount()){
                 item.setRunning(false);
-                itemDAO.closeAuction(item.getId());
             }
         }
         catch(DataAccessException e){

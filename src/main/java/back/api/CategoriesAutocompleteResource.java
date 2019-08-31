@@ -17,7 +17,7 @@ public class CategoriesAutocompleteResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException{
-        if(getQueryValue("category") == null || getQueryValue("category").isEmpty()){
+        if(getQueryValue("category") == null){
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"no category name given");
         }
 

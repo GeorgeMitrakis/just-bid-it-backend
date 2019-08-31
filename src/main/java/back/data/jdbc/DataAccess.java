@@ -210,39 +210,37 @@ public class DataAccess {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             if((item.getLatitude() == null) || (item.getLongitude()==null)){
                 jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, is_running, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     ps.setLong(1, item.getSellerId());
-                    ps.setBoolean(2, item.isRunning());
-                    ps.setString(3, item.getName());
-                    ps.setFloat(4, item.getCurrentBid());
-                    ps.setFloat(5, item.getFirstBid());
-                    ps.setFloat(6, item.getBuyPrice());
-                    ps.setInt(7, item.getNumberOfBids());
-                    ps.setString(8, item.getLocation());
-                    ps.setString(9, item.getCountry());
-                    ps.setString(10, item.getStart());
-                    ps.setString(11, item.getEnd());
-                    ps.setString(12, item.getDescription());
+                    ps.setString(2, item.getName());
+                    ps.setFloat(3, item.getCurrentBid());
+                    ps.setFloat(4, item.getFirstBid());
+                    ps.setFloat(5, item.getBuyPrice());
+                    ps.setInt(6, item.getNumberOfBids());
+                    ps.setString(7, item.getLocation());
+                    ps.setString(8, item.getCountry());
+                    ps.setString(9, item.getStart());
+                    ps.setString(10, item.getEnd());
+                    ps.setString(11, item.getDescription());
                     return ps;
                 },keyHolder);
             }
             else{
                 jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, is_running, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     ps.setLong(1, item.getSellerId());
-                    ps.setBoolean(2, item.isRunning());
-                    ps.setString(3, item.getName());
-                    ps.setFloat(4, item.getCurrentBid());
-                    ps.setFloat(5, item.getFirstBid());
-                    ps.setFloat(6, item.getBuyPrice());
-                    ps.setInt(7, item.getNumberOfBids());
-                    ps.setString(8, item.getLocation());
-                    ps.setDouble(9, item.getLatitude());
-                    ps.setDouble(10, item.getLongitude());
-                    ps.setString(11, item.getCountry());
-                    ps.setString(12, item.getStart());
-                    ps.setString(13, item.getEnd());
-                    ps.setString(14, item.getDescription());
+                    ps.setString(2, item.getName());
+                    ps.setFloat(3, item.getCurrentBid());
+                    ps.setFloat(4, item.getFirstBid());
+                    ps.setFloat(5, item.getBuyPrice());
+                    ps.setInt(6, item.getNumberOfBids());
+                    ps.setString(7, item.getLocation());
+                    ps.setDouble(8, item.getLatitude());
+                    ps.setDouble(9, item.getLongitude());
+                    ps.setString(10, item.getCountry());
+                    ps.setString(11, item.getStart());
+                    ps.setString(12, item.getEnd());
+                    ps.setString(13, item.getDescription());
                     return ps;
                 },keyHolder);
             }
@@ -276,18 +274,18 @@ public class DataAccess {
         }
     }
 
-    public void closeAuction(long itemId) throws DataAccessException{
-
-        try{
-            jdbcTemplate.update("update just_bid_it.item set is_running = false where id = ?", itemId);
-        }
-        catch(Exception e) {
-            System.err.println("Failed to close auction");
-            e.printStackTrace();
-            throw new DataAccessException("could not close auction"){};
-        }
-
-    }
+//    public void closeAuction(long itemId) throws DataAccessException{
+//
+//        try{
+//            jdbcTemplate.update("update just_bid_it.item set is_running = false where id = ?", itemId);
+//        }
+//        catch(Exception e) {
+//            System.err.println("Failed to close auction");
+//            e.printStackTrace();
+//            throw new DataAccessException("could not close auction"){};
+//        }
+//
+//    }
 
     public void updateCurrentBid(long itemId, float amount) throws DataAccessException{
         try{
