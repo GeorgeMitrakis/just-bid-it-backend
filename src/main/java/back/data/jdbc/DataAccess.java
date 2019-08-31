@@ -13,8 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class DataAccess {
 
@@ -171,6 +170,37 @@ public class DataAccess {
     }
 
     //items resource
+    private Map<String,List<String>> ListToMapConverter(List<Map<String,String>> l){
+        Map<String,List<String>> m = new HashMap<>();
+        Map<String,String> listElem;
+        List<String> mapValue;
+        for (int i = 0; i < l.size(); i++) {
+            listElem = l.get(i);
+            for (String itemId: listElem.keySet() ) {
+                if(m.get(itemId) == null){
+                    mapValue = new ArrayList<>();
+                    mapValue.add(listElem.get(itemId));
+                    m.put(itemId, mapValue);
+                }
+                else{
+                    mapValue = m.get(itemId);
+                    mapValue.add(listElem.get(itemId));
+                }
+            }
+        }
+        return m;
+    }
+
+    private void setItemCategories(List<Item> items, List<Map<String,String>> itemCategories){
+        Map<String,List<String>> m = ListToMapConverter(itemCategories);
+        System.err.println(m);
+        Item item;
+        for(int i=0 ; i<items.size() ; i++){
+            item = items.get(i);
+            item.setCategories(m.get(String.valueOf(item.getId())));
+        }
+    }
+
     public long countItems() {
         return jdbcTemplate.queryForObject("select count(*) from just_bid_it.item", Long.class);
     }
@@ -180,11 +210,17 @@ public class DataAccess {
         Long[] categoryParams = new Long[1];
         List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper(null));
         List<String> categories;
-        for(int i=0 ; i<items.size() ; i++){
-            categoryParams[0] = items.get(i).getId();
-            categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
-            items.get(i).setCategories(categories);
-        }
+//        for(int i=0 ; i<items.size() ; i++){
+//            categoryParams[0] = items.get(i).getId();
+//            categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
+//            items.get(i).setCategories(categories);
+//        }
+        categoryParams[0] = (long) userId;
+        List<Map<String,String>> itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
+                "from just_bid_it.item_categories, just_bid_it.item" +
+                " where item.id = item_categories.item_id and item.seller_id = ?", categoryParams, new ICRowMapper());
+
+        setItemCategories(items, itemCategories);
 
         return items;
     }
@@ -316,15 +352,28 @@ public class DataAccess {
     //TODO: proper full-text search query
     public List<Item> searchItems(String searchTerm, String category) throws DataAccessException{
         try{
-            //String[] params = new String[]{searchTerm, category};
-            Long[] categoryParams = new Long[1];
-            List<String> categories;
+            //fetch items
             List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
-            for(int i=0 ; i<items.size() ; i++){
-                categoryParams[0] = items.get(i).getId();
-                categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
-                items.get(i).setCategories(categories);
-            }
+
+            //fetch pairs of items and categories
+            List<Map<String,String>> itemCategories;
+//            String[] params = new String[]{category};
+//            if(category.isEmpty()){//no category given
+                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
+                        "from just_bid_it.item_categories, just_bid_it.item" +
+                        " where item.id = item_categories.item_id", new ICRowMapper());
+
+//            }
+//            else{
+//                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
+//                        "from just_bid_it.item_categories, just_bid_it.item" +
+//                        " where item.id = item_categories.item_id and category = ?", params, new ICRowMapper());
+//
+//            }
+
+            System.out.println(itemCategories);
+            //set categories to their items
+            setItemCategories(items, itemCategories);
 
             return items;
         }

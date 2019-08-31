@@ -18,9 +18,9 @@ public class SearchResource extends ServerResource {
     @Override
     protected Representation get() throws ResourceException {
         //TODO: correct search term checking
-//        if(getQueryValue("term") == null || getQueryValue("term").isEmpty()
-//        ||getQueryValue("category") == null || getQueryValue("category").isEmpty()){
-//            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"no category name given");
+//        if(getQueryValue("term") == null
+//        ||getQueryValue("category") == null){
+//            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"missing parameters");
 //        }
 
         String searchTerm = getQueryValue("term");

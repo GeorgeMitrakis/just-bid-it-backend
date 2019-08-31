@@ -19,7 +19,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public List<Item> getItems(int userId, Limits limits){
         List<Item> items = dataAccess.getItems(userId, limits.getStart(), limits.getCount());
-        limits.setTotal(dataAccess.countItems());
+        limits.setTotal(items.size());
 
         return items;
     }
