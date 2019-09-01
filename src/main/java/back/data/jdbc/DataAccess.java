@@ -225,7 +225,7 @@ public class DataAccess {
         return items;
     }
 
-    public Optional<Item> getItemById(Long id) {
+    public Optional<Item> getItemById(long id) {
         Long[] params = new Long[]{id};
         //bring the item's categories
         List<String> categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", params, new ItemCategoriesRowMapper());
@@ -325,7 +325,7 @@ public class DataAccess {
 
     public void updateCurrentBid(long itemId, float amount) throws DataAccessException{
         try{
-            jdbcTemplate.update("update just_bid_it.item set current_bid = ? where id = ?",
+            jdbcTemplate.update("update just_bid_it.item set current_bid = ?, number_of_bids = number_of_bids +1 where id = ?",
                     amount, itemId);
         }
         catch(Exception e) {
