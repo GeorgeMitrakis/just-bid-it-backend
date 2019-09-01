@@ -73,7 +73,7 @@
 #### /search
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {page number, page size, +++} | {...}  |  αναζήτηση ενεργών δημοπρασιών   |
+| GET    | [term, category] | total, items:[]  |  αναζήτηση ενεργών δημοπρασιών   |
 
 #### /categories
 | Method | Input | Output | Action |

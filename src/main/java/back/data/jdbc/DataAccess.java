@@ -353,15 +353,15 @@ public class DataAccess {
     public List<Item> searchItems(String searchTerm, String category) throws DataAccessException{
         try{
             //fetch items
-            List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
+//            List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
 
             //fetch pairs of items and categories
-            List<Map<String,String>> itemCategories;
+//            List<Map<String,String>> itemCategories;
 //            String[] params = new String[]{category};
 //            if(category.isEmpty()){//no category given
-                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
-                        "from just_bid_it.item_categories, just_bid_it.item" +
-                        " where item.id = item_categories.item_id", new ICRowMapper());
+//                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
+//                        "from just_bid_it.item_categories, just_bid_it.item" +
+//                        " where item.id = item_categories.item_id", new ICRowMapper());
 
 //            }
 //            else{
@@ -371,7 +371,49 @@ public class DataAccess {
 //
 //            }
 
-            System.out.println(itemCategories);
+            //System.out.println(itemCategories);
+            //set categories to their items
+            //setItemCategories(items, itemCategories);
+
+            List<Item> items;
+            List<Map<String,String>> itemCategories;
+
+            if((searchTerm == null || searchTerm.isEmpty()) && (category == null || category.isEmpty())){
+                //neither search term nor category given; get all items
+                items = jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
+                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories", new ICRowMapper());
+            }
+            else if((searchTerm == null || searchTerm.isEmpty()) && (!(category == null || category.isEmpty()))){
+                //no search term given; get items based on given category
+                String[] params = new String[]{category};
+                items = jdbcTemplate.query("select item.* from just_bid_it.item as item, just_bid_it.item_categories where id = item_id and category = ? group by id", params, new ItemRowMapper(null));
+                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",params , new ICRowMapper());
+            }
+            else if((!(searchTerm == null || searchTerm.isEmpty())) && (category == null || category.isEmpty())){
+                //search term given without category; do a full-text search
+                String[] params = new String[]{searchTerm};
+                items = jdbcTemplate.query("select *from (" +
+                        "select * " +
+                        "from just_bid_it.item " +
+                        "where match(name, description) against(? in natural language mode ) " +
+                        ") as item", params, new ItemRowMapper(null));
+                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories", new ICRowMapper());
+
+            }
+            else{
+                //both search term and category given; do a full-text search join query
+                String[] params = new String[]{searchTerm, category};
+                String[] paramsCat = new String[]{category};
+                items = jdbcTemplate.query("select *from (" +
+                        "select item.* " +
+                        "from just_bid_it.item " +
+                        "where match(name, description) against(? in natural language mode ) " +
+                        ") as item," +
+                        "just_bid_it.item_categories as item_categories " +
+                        "where item.id = item_categories.item_id and category = ? " +
+                        "group by id", params, new ItemRowMapper(null));
+                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",paramsCat, new ICRowMapper());
+            }
             //set categories to their items
             setItemCategories(items, itemCategories);
 
