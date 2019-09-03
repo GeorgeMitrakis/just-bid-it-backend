@@ -33,7 +33,7 @@
 #### /admin/users
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {page number, page size, +++} | {...}  |  ο διαχειριστής παίρνει τους χρήστες του συστήματος  |
+| GET    | - | users:[ { firstname, lastname, email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating, id, username, role, access} , ...] |  ο διαχειριστής παίρνει τους χρήστες του συστήματος  |
 
 
 #### /admin/users/{username}

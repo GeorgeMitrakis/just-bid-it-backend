@@ -37,7 +37,7 @@ public class UsersResource extends ServerResource {
 //        map.put("start", limits.getStart());
 //        map.put("count", limits.getCount());
 //        map.put("total", limits.getTotal());
-        map.put("results", users);
+        map.put("users", users);
 
         return new JsonMapRepresentation(map);
     }
