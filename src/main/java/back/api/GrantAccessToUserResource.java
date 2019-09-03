@@ -17,7 +17,7 @@ public class GrantAccessToUserResource extends ServerResource {
     private final UserDAO userDAO = Configuration.getInstance().getUserDAO();
 
     @Override
-    protected Representation put(Representation entity) throws ResourceException{
+    protected Representation post(Representation entity) throws ResourceException{
 
         Form form = new Form(entity);
         //String adminId = form.getFirstValue("id");
