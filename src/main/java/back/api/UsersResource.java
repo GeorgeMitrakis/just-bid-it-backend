@@ -1,5 +1,6 @@
 package back.api;
 
+import back.model.CommonUser;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -28,13 +29,14 @@ public class UsersResource extends ServerResource {
         //read request parameters to create the limits
         //String start = getQueryValue("start");
         //...
-        Limits limits = new Limits(0, 10);
-        List<User> users = userDAO.getUsers(limits);
-
+//        Limits limits = new Limits(0, 10);
+//        List<User> users = userDAO.getUsers(limits);
+        List<CommonUser> users = userDAO.getCommonUsers();
+//
         Map<String, Object> map = new HashMap<>();
-        map.put("start", limits.getStart());
-        map.put("count", limits.getCount());
-        map.put("total", limits.getTotal());
+//        map.put("start", limits.getStart());
+//        map.put("count", limits.getCount());
+//        map.put("total", limits.getTotal());
         map.put("results", users);
 
         return new JsonMapRepresentation(map);

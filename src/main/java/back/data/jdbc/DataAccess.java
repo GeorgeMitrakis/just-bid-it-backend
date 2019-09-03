@@ -89,6 +89,12 @@ public class DataAccess {
         return jdbcTemplate.query("select * from just_bid_it.user limit ?, ?", params, new UserRowMapper());
     }
 
+    public List<CommonUser> getCommonUsers(){
+        List<User> users = jdbcTemplate.query("select * from just_bid_it.user", new UserRowMapper());
+        List<CommonUser> commonUsers = jdbcTemplate.query("select common_user.* from just_bid_it.user, just_bid_it.common_user as common_user where user.id = common_user.id", new CommonUserRowMapper(users));
+        return commonUsers;
+    }
+
     public Optional<User> getUserById(Long id) {
         Long[] params = new Long[]{id};
         List<User> users = jdbcTemplate.query("select * from just_bid_it.user where id = ?", params, new UserRowMapper());
