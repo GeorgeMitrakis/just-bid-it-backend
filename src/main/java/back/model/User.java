@@ -5,7 +5,7 @@ public class User {
     private long id;
     private final String username;
     private final String role;
-    private final String access;
+    private String access;
 
     public User(long id, String username, String role, String access) {
         this.id = id;
@@ -34,5 +34,7 @@ public class User {
         this.id = id;
     }
 
-    //TODO: method for changing access to "granted" or "denied"
+    public void setAccess(String access) {
+        this.access = access;
+    }
 }

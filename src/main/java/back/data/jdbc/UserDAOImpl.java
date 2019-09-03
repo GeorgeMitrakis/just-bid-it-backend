@@ -64,4 +64,14 @@ public class UserDAOImpl implements UserDAO {
     public void storeUser(CommonUser commonUser, String password){
         dataAccess.storeUser(commonUser, password);
     }
+
+    @Override
+    public void grantUserAccess(String username){
+        dataAccess.grantUserAccess(username);
+    }
+
+    @Override
+    public void denyUserAccess(String username){
+        dataAccess.denyUserAccess(username);
+    }
 }

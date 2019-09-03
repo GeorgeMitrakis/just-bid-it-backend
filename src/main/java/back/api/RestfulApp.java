@@ -47,6 +47,12 @@ public class RestfulApp extends Application {
 //		//GET, PUT (admin)
 //		router.attach("/admin/users/{username}", );
 
+        //PUT
+        router.attach("/admin/users/{username}/accept", GrantAccessToUserResource.class);
+
+		//PUT
+		router.attach("/admin/users/{username}/decline", DenyAccessToUserResource.class);
+
 		//GET, POST (common user)
 		router.attach("/items", ItemsResource.class);
 
