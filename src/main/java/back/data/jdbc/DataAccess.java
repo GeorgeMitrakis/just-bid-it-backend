@@ -175,6 +175,30 @@ public class DataAccess {
         }
     }
 
+    void grantUserAccess(String username) throws DataAccessException{
+        try{
+            String[] params = new String[]{username};
+            jdbcTemplate.update("update just_bid_it.user set access = 'granted' where username = ?", username);
+        }catch (Exception e) {
+            System.err.println("Failed to grant access to user");
+            e.printStackTrace();
+            throw new DataAccessException("could not grant access to user"){};
+        }
+
+    }
+
+    void denyUserAccess(String username) throws DataAccessException{
+        try{
+            String[] params = new String[]{username};
+            jdbcTemplate.update("update just_bid_it.user set access = 'denied' where username = ?", username);
+        }catch (Exception e) {
+            System.err.println("Failed to deny access to user");
+            e.printStackTrace();
+            throw new DataAccessException("could not deny access to user"){};
+        }
+
+    }
+
     //items resource
     private Map<String,List<String>> ListToMapConverter(List<Map<String,String>> l){
         Map<String,List<String>> m = new HashMap<>();

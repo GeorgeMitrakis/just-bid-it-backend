@@ -26,4 +26,8 @@ public interface UserDAO {
 
     void storeUser(CommonUser commonUser, String password);
 
+    void grantUserAccess(String username);
+
+    void denyUserAccess(String username);
+
 }

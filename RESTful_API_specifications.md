@@ -36,11 +36,20 @@
 | GET    | - | users:[ { firstname, lastname, email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating, id, username, role, access} , ...] |  ο διαχειριστής παίρνει τους χρήστες του συστήματος  |
 
 
-#### /admin/users/{username}
+#### /admin/users/{username} (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο διαχειριστής βλέπει τις πληροφορίες του χρήστη {username}   |
-| PUT    | {...} | {...}  |  ο διαχειριστής απαντάει στην αίτηση εγγραφής του χρήστη {username}   |
+
+#### /admin/users/{username}/accept
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής εγγρίνει στην αίτηση εγγραφής του χρήστη {username}   |
+
+#### /admin/users/{username}/decline
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
 
 
 #### /items
@@ -50,7 +59,7 @@
 | POST   | name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 
-#### /items/{id}
+#### /items/{id} (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει το αντικείμενο #{id} μαζί με όλες τις προσφορές στη δημοπρασία του   |
@@ -81,42 +90,42 @@
 | GET    | category | categories:[]  |  αναζήτηση κατηγοριών με το input string ως πρόθεμα   |
 
 
-#### /bids
+#### /bids (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {page number, page size, +++} | {status:won/running/lost, +++ ...}  |  ο χρήστης παίρνει τα αντικείμενα στα οποία έχει υποβάλλει προσφορές   |
 
 
-#### /messages
+#### /messages (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει ή στείλει   |
 
 
-#### /messages/sent
+#### /messages/sent (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
 
 
-#### /messages/received
+#### /messages/received (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει   |
 
 
-#### /messages/{id}
+#### /messages/{id} (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ΤΟ ΜΗΝΥΜΑ ΠΡΕΠΕΙ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! ο χρήστης παίρνει το μήνυμα {id}   |
 
 
-#### /messages/{username}
+#### /messages/{username} (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα μεταξύ αυτού και του χρήστη {username}   |
 
-#### /messages/{username}/send
+#### /messages/{username}/send (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | POST   | {...} | {...}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
