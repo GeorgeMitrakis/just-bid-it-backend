@@ -17,7 +17,7 @@ public interface ItemDAO {
 
     List<Item> searchItems(String searchTerm, String category);
 
-    void closeAuction(long itemId);
+//    void closeAuction(long itemId);
 
     void updateCurrentBid(long itemId, float amount);
 }

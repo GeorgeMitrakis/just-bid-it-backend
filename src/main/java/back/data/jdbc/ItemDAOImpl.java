@@ -19,7 +19,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public List<Item> getItems(int userId, Limits limits){
         List<Item> items = dataAccess.getItems(userId, limits.getStart(), limits.getCount());
-        limits.setTotal(dataAccess.countItems());
+        limits.setTotal(items.size());
 
         return items;
     }
@@ -44,10 +44,10 @@ public class ItemDAOImpl implements ItemDAO {
         return dataAccess.searchItems(searchTerm, category);
     }
 
-    @Override
-    public void closeAuction(long itemId){
-        dataAccess.closeAuction(itemId);
-    }
+//    @Override
+//    public void closeAuction(long itemId){
+//        dataAccess.closeAuction(itemId);
+//    }
 
     @Override
     public void updateCurrentBid(long itemId, float amount){

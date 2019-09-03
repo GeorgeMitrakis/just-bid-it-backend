@@ -5,6 +5,8 @@ import back.model.Item;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ItemRowMapper implements RowMapper<Item>{
@@ -17,10 +19,28 @@ public class ItemRowMapper implements RowMapper<Item>{
 
     @Override
     public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+        boolean isRunning;
+
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String currTime = myDateObj.format(myFormatObj);
+
+        //check if auction is still running
+        if(currTime.compareTo(rs.getString("end"))>0){//if auction time expired
+            isRunning = false;
+        }
+        else if(rs.getFloat("current_bid") >= rs.getFloat("buy_price")){//if last bid is greater or equal to buy price
+            isRunning = false;
+        }
+        else{
+            isRunning = true;
+        }
+
         return new Item(
                 rs.getInt("id"),
                 rs.getInt("seller_id"),
-                rs.getBoolean("is_running"),
+                isRunning,
                 rs.getString("name"),
                 this.categories,
                 rs.getFloat("current_bid"),

@@ -67,13 +67,13 @@
 #### /items/{id}/buy
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | {...} | {...}  |  ο χρήστης αγοράζει το αντικείμενο, κερδίζοντας τη δημοπρασία   |
+| POST   | bidder_id | {item:{},bid:{}}  |  ο χρήστης αγοράζει το αντικείμενο, κερδίζοντας τη δημοπρασία   |
 
 
 #### /search
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {page number, page size, +++} | {...}  |  αναζήτηση ενεργών δημοπρασιών   |
+| GET    | [term, category] | total, items:[]  |  αναζήτηση ενεργών δημοπρασιών   |
 
 #### /categories
 | Method | Input | Output | Action |
