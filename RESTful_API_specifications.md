@@ -44,12 +44,12 @@
 #### /admin/users/{username}/accept
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής εγγρίνει στην αίτηση εγγραφής του χρήστη {username}   |
+| POST    | - | user:{id, username,role,access}  |  ο διαχειριστής εγγρίνει στην αίτηση εγγραφής του χρήστη {username}   |
 
 #### /admin/users/{username}/decline
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
+| POST    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
 
 
 #### /items
