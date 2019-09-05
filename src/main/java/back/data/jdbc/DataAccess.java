@@ -382,28 +382,39 @@ public class DataAccess {
     //TODO: proper full-text search query
     public List<Item> searchItems(String searchTerm, String category) throws DataAccessException{
         try{
-            //fetch items
-//            List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
-
-            //fetch pairs of items and categories
-//            List<Map<String,String>> itemCategories;
-//            String[] params = new String[]{category};
-//            if(category.isEmpty()){//no category given
-//                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
-//                        "from just_bid_it.item_categories, just_bid_it.item" +
-//                        " where item.id = item_categories.item_id", new ICRowMapper());
-
-//            }
-//            else{
-//                itemCategories = jdbcTemplate.query("select item_categories.item_id as item_id, item_categories.category as category " +
-//                        "from just_bid_it.item_categories, just_bid_it.item" +
-//                        " where item.id = item_categories.item_id and category = ?", params, new ICRowMapper());
+//            String location = null;
+//            Float price = null;
 //
+//            String query = "select item.* from ";
+//            //add fulltext search query
+//            if(searchTerm!=null){
+//                query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) as ";
 //            }
+//
+//            query = query + "item ";
+//
+//            if(category!=null){
+//                query = query +", just_bid_it.item_categories as item_categories "   ;
+//            }
+//            if(category!=null || location!=null || price!=null ){
+//                query = query+" where ";
+//            }
+//            if(category!=null){
+//                query = query + "item.id = item_categories.id and category = ? ";
+//            }
+//            if(location!=null){
+//                query = query + " and location = ? ";
+//            }
+//            if(price!=null){
+//                query = query + "price <= ? ";
+//            }
+//            if(category!=null){
+//                query = query + "group by id";
+//            }
+//
+//            //continue with parameters and categories
+//            if()
 
-            //System.out.println(itemCategories);
-            //set categories to their items
-            //setItemCategories(items, itemCategories);
 
             List<Item> items;
             List<Map<String,String>> itemCategories;

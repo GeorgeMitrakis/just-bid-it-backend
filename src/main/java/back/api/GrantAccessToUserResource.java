@@ -30,7 +30,7 @@ public class GrantAccessToUserResource extends ServerResource {
         }
 
         userDAO.grantUserAccess(username);
-        userOptional.get().setAccess("denied");
+        userOptional.get().setAccess("accepted");
         Map<String, Object> map = new HashMap<>();
         map.put("user", userOptional.get());
 
