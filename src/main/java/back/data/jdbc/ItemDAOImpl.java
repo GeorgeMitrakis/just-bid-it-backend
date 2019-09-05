@@ -40,8 +40,8 @@ public class ItemDAOImpl implements ItemDAO {
 //    }
 
     @Override
-    public List<Item> searchItems(String searchTerm, String category){
-        return dataAccess.searchItems(searchTerm, category);
+    public List<Item> searchItems(String searchTerm, String category, String location, Float price){
+        return dataAccess.searchItems(searchTerm, category, location, price);
     }
 
 //    @Override

@@ -378,83 +378,103 @@ public class DataAccess {
         }
     }
 
-    //item search
-    //TODO: proper full-text search query
-    public List<Item> searchItems(String searchTerm, String category) throws DataAccessException{
+    //location autocomplete search resource
+    public List<String> getLocationNamesByStartOfName(String substring) throws DataAccessException {
         try{
-//            String location = null;
-//            Float price = null;
-//
-//            String query = "select item.* from ";
-//            //add fulltext search query
-//            if(searchTerm!=null){
-//                query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) as ";
-//            }
-//
-//            query = query + "item ";
-//
-//            if(category!=null){
-//                query = query +", just_bid_it.item_categories as item_categories "   ;
-//            }
-//            if(category!=null || location!=null || price!=null ){
-//                query = query+" where ";
-//            }
-//            if(category!=null){
-//                query = query + "item.id = item_categories.id and category = ? ";
-//            }
-//            if(location!=null){
-//                query = query + " and location = ? ";
-//            }
-//            if(price!=null){
-//                query = query + "price <= ? ";
-//            }
-//            if(category!=null){
-//                query = query + "group by id";
-//            }
-//
-//            //continue with parameters and categories
-//            if()
+            String[] params = new String[]{substring+"%"};
+            return jdbcTemplate.query("SELECT location from just_bid_it.item where location like ? group by location", params, new LocationRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to search for locations");
+            e.printStackTrace();
+            throw new DataAccessException("could not search for locations"){};
+        }
+    }
+
+        //item search
+
+    private Object[] appendValue(Object[] obj, Object newObj) {
+
+        ArrayList<Object> temp = new ArrayList<Object>(Arrays.asList(obj));
+        temp.add(newObj);
+        return temp.toArray();
+
+    }
+
+    //TODO: proper full-text search query
+    public List<Item> searchItems(String searchTerm, String category, String location, Float price) throws DataAccessException{
+        try{
+
+            //build the query
+
+            String query = "select item.* from ";
+            //add fulltext search query
+            if(searchTerm!=null){
+                query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) ) as ";
+            }
+            query = query + "item ";
+            if(category!=null){
+                query = query +", just_bid_it.item_categories as item_categories "   ;
+            }
+            if(category!=null || location!=null || price!=null ){
+                query = query+" where ";
+            }
+            if(category!=null){
+                query = query + "item.id = item_categories.item_id and category = ? ";
+                if(location!=null || price!=null){
+                    query = query + " and ";
+                }
+            }
+            if(location!=null){
+                query = query + " location = ? ";
+                if(price!=null){
+                    query = query + " and ";
+                }
+            }
+            if(price!=null){
+                query = query + "current_bid <= ? ";
+            }
+            if(category!=null){
+                query = query + "group by id";
+            }
+
+            System.out.println(query);
 
 
             List<Item> items;
             List<Map<String,String>> itemCategories;
+            Object[] params = new Object[]{};
 
-            if((searchTerm == null || searchTerm.isEmpty()) && (category == null || category.isEmpty())){
-                //neither search term nor category given; get all items
-                items = jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
+            //get categories
+            if(category == null){
                 itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories", new ICRowMapper());
-            }
-            else if((searchTerm == null || searchTerm.isEmpty()) && (!(category == null || category.isEmpty()))){
-                //no search term given; get items based on given category
-                String[] params = new String[]{category};
-                items = jdbcTemplate.query("select item.* from just_bid_it.item as item, just_bid_it.item_categories where id = item_id and category = ? group by id", params, new ItemRowMapper(null));
-                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",params , new ICRowMapper());
-            }
-            else if((!(searchTerm == null || searchTerm.isEmpty())) && (category == null || category.isEmpty())){
-                //search term given without category; do a full-text search
-                String[] params = new String[]{searchTerm};
-                items = jdbcTemplate.query("select *from (" +
-                        "select * " +
-                        "from just_bid_it.item " +
-                        "where match(name, description) against(? in natural language mode ) " +
-                        ") as item", params, new ItemRowMapper(null));
-                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories", new ICRowMapper());
-
             }
             else{
-                //both search term and category given; do a full-text search join query
-                String[] params = new String[]{searchTerm, category};
-                String[] paramsCat = new String[]{category};
-                items = jdbcTemplate.query("select *from (" +
-                        "select item.* " +
-                        "from just_bid_it.item " +
-                        "where match(name, description) against(? in natural language mode ) " +
-                        ") as item," +
-                        "just_bid_it.item_categories as item_categories " +
-                        "where item.id = item_categories.item_id and category = ? " +
-                        "group by id", params, new ItemRowMapper(null));
-                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",paramsCat, new ICRowMapper());
+                String[] catParam = new String[]{category};
+                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",catParam , new ICRowMapper());
             }
+
+            //get items
+            if(searchTerm == null && category== null && location == null && price == null){
+                items = jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
+            }
+            else{
+                if(searchTerm!=null){
+                    params = appendValue(params, searchTerm);
+                }
+                if(category!=null){
+                    params = appendValue(params, category);
+                }
+                if(location!=null){
+                    params = appendValue(params, location);
+                }
+                if(price!=null){
+                    params = appendValue(params, price);
+                }
+
+                items = jdbcTemplate.query(query, params, new ItemRowMapper(null));
+            }
+
             //set categories to their items
             setItemCategories(items, itemCategories);
 
