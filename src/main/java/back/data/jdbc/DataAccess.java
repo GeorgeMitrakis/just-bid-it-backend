@@ -378,7 +378,20 @@ public class DataAccess {
         }
     }
 
-    //item search
+    //location autocomplete search resource
+    public List<String> getLocationNamesByStartOfName(String substring) throws DataAccessException {
+        try{
+            String[] params = new String[]{substring+"%"};
+            return jdbcTemplate.query("SELECT location from just_bid_it.item where location like ? group by location", params, new LocationRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to search for locations");
+            e.printStackTrace();
+            throw new DataAccessException("could not search for locations"){};
+        }
+    }
+
+        //item search
 
     private Object[] appendValue(Object[] obj, Object newObj) {
 

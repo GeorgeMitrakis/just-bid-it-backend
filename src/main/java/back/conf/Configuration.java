@@ -1,9 +1,6 @@
 package back.conf;
 
-import back.data.CategoryDAO;
-import back.data.ItemDAO;
-import back.data.UserDAO;
-import back.data.BidDAO;
+import back.data.*;
 import back.data.jdbc.*;
 
 import java.util.Properties;
@@ -73,5 +70,9 @@ public class Configuration {
 
     public BidDAO getBidDAO(){
         return new BidDAOImpl(dataAccess);
+    }
+
+    public LocationDAO getLocationDAO(){
+        return new LocationDAOImpl(dataAccess);
     }
 }

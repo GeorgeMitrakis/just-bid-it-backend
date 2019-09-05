@@ -89,6 +89,10 @@
 | ------ | ----- | ------ | ------ |
 | GET    | category | categories:[]  |  αναζήτηση κατηγοριών με το input string ως πρόθεμα   |
 
+#### /locations
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| GET    | location | locations:[]  |  αναζήτηση τοποθεσιών αντικειμένων με το input string ως πρόθεμα   |
 
 #### /bids (not implemented)
 | Method | Input | Output | Action |
