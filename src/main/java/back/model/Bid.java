@@ -17,6 +17,16 @@ public class Bid {
         this.amount = amount;
     }
 
+    public Bid(long id, long itemId, long bidderId, String bidder, int bidderRating, String time, float amount) {
+        this.id = id;
+        this.itemId = itemId;
+        this.bidderId = bidderId;
+        this.bidder = bidder;
+        this.bidderRating = bidderRating;
+        this.time = time;
+        this.amount = amount;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

@@ -1,5 +1,6 @@
 package back.data.jdbc;
 
+import back.api.JsonMapRepresentation;
 import back.model.Bid;
 import back.model.CommonUser;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -232,6 +233,28 @@ public class DataAccess {
         }
     }
 
+    private void setItemBids(List<Item> items, List<Bid> itemBids){
+        System.err.println(items.size());
+        System.err.println(itemBids.size());
+
+        Map<Long, List<Bid>> map = new HashMap<>();
+        List<Bid> l;
+        for (Bid b: itemBids) {
+            l = map.get(b.getItemId());
+            if(l == null){
+                l = new ArrayList<>();
+                map.put(b.getItemId(), l);
+            }
+            l.add(b);
+        }
+        System.err.println(map);
+        System.err.println(map.size());
+        for (Item item : items) {
+            item.setBids(map.get(item.getId()));
+        }
+        System.err.println(new JsonMapRepresentation(map));
+    }
+
     public long countItems() {
         return jdbcTemplate.queryForObject("select count(*) from just_bid_it.item", Long.class);
     }
@@ -253,6 +276,17 @@ public class DataAccess {
 
         setItemCategories(items, itemCategories);
 
+        Long[] bidParams = new Long[1];
+        bidParams[0] = (long) userId;
+        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+                "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
+                "where bid.item_id = item.id " +
+                "and bid.bidder_id = common_user.id " +
+                "and user.id = common_user.id " +
+                "and item.seller_id = ?", bidParams, new BidRowMapper());
+
+
+        setItemBids(items, itemBids);
         return items;
     }
 
@@ -546,6 +580,23 @@ public class DataAccess {
     }
 
     //bid item
+
+    public List<Bid> getFullBidsInfoByItemId(long itemId){
+        try{
+            Long[] params = new Long[]{itemId};
+            return jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+                    "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user " +
+                    "where bid.item_id = ? " +
+                    "and bid.bidder_id = common_user.id " +
+                    "and user.id = common_user.id", params, new BidRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get bid list from the database");
+            e.printStackTrace();
+            throw new DataAccessException("could not get bid list from the database"){};
+        }
+    }
+
     public void storeBid(Bid bid) throws DataAccessException{
         try{
             KeyHolder keyHolder = new GeneratedKeyHolder();

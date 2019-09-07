@@ -55,7 +55,7 @@
 #### /items
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | userId | {total, start, count, results:[]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
+| GET    | userId | {total, start, count, results:[{id, userId, name, running, bids:[{id, amount, bidder, bidderId, bidderRating, itemId, time }], categories:[{category: "Shoes"},{ category:...}, ...], buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
 | POST   | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 

@@ -8,6 +8,7 @@ public class Item {
     private boolean running;
     private String name;
     private List<String> categories;
+    private List<Bid> bids;
     private float currentBid;
     private float firstBid;
     private float buyPrice;
@@ -21,12 +22,13 @@ public class Item {
     private String description;
 
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.categories = categories;
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -40,12 +42,13 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name,  List<String> categories, float currentBid, float firstBid, float buyPrice,  int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.categories = categories;
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -59,7 +62,45 @@ public class Item {
         this.description = description;
     }
 
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
+        this.name = name;
+        this.categories = categories;
+        this.bids = null;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.country = country;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
 
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
+        this.name = name;
+        this.categories = categories;
+        this.bids = null;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = null;
+        this.longitude = null;
+        this.country = country;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
 
     public void setId(long id) {
         this.id = id;
@@ -75,6 +116,10 @@ public class Item {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
 
     public void setCurrentBid(float currentBid) {
@@ -136,6 +181,11 @@ public class Item {
     public List<String> getCategories() {
         return categories;
     }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
     public float getCurrentBid() {
         return currentBid;
     }

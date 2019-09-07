@@ -1,7 +1,9 @@
 package back.api;
 
+import back.data.BidDAO;
 import back.data.ItemDAO;
 import back.data.Limits;
+import back.model.Bid;
 import back.model.Item;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
@@ -21,7 +23,7 @@ import java.util.Map;
 public class ItemsResource extends ServerResource {
 
     private final ItemDAO itemDAO = Configuration.getInstance().getItemDAO();
-
+    private final BidDAO bidDAO = Configuration.getInstance().getBidDAO();
 
     @Override
     protected Representation get() throws ResourceException {
