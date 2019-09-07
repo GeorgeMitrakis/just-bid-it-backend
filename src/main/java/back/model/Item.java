@@ -6,19 +6,19 @@ public class Item {
     private long id;
     private final long sellerId;
     private boolean running;
-    private final String name;
+    private String name;
     private List<String> categories;
     private float currentBid;
-    private final float firstBid;
-    private final float buyPrice;
+    private float firstBid;
+    private float buyPrice;
     private int numberOfBids;
-    private final String location;
-    private final Double latitude;
-    private final Double longitude;
-    private final String country;
+    private String location;
+    private Double latitude;
+    private Double longitude;
+    private String country;
     private final String start;
-    private final String end;
-    private final String description;
+    private String end;
+    private String description;
 
 
     public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
@@ -65,6 +65,10 @@ public class Item {
         this.id = id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setRunning(boolean running) {
         this.running = running;
     }
@@ -79,6 +83,38 @@ public class Item {
 
     public void setNumberOfBids(int numberOfBids) {
         this.numberOfBids = numberOfBids;
+    }
+
+    public void setFirstBid(float firstBid) {
+        this.firstBid = firstBid;
+    }
+
+    public void setBuyPrice(float buyPrice) {
+        this.buyPrice = buyPrice;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public long getId() {

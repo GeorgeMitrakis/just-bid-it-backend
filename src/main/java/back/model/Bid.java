@@ -4,6 +4,8 @@ public class Bid {
     private long id;
     private final long itemId;
     private final long bidderId;
+    private String bidder;
+    private int bidderRating;
     private final String time;
     private final float amount;
 
@@ -17,6 +19,14 @@ public class Bid {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setBidder(String bidder) {
+        this.bidder = bidder;
+    }
+
+    public void setBidderRating(int bidderRating) {
+        this.bidderRating = bidderRating;
     }
 
     public long getId() {

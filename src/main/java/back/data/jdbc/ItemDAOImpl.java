@@ -53,4 +53,19 @@ public class ItemDAOImpl implements ItemDAO {
     public void updateCurrentBid(long itemId, float amount){
         dataAccess.updateCurrentBid(itemId, amount);
     }
+
+    @Override
+    public void updateItem(Item item){
+        dataAccess.updateItem(item);
+    }
+
+    @Override
+    public void addCategoryToItem(Item item, String category){
+        dataAccess.addCategoryToItem(item, category);
+    }
+
+    @Override
+    public void removeCategoryFromItem(Item item, String category){
+        dataAccess.removeCategoryFromItem(item, category);
+    }
 }

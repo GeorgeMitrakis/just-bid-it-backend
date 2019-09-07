@@ -1,67 +1,42 @@
 package back.api;
 
+import back.conf.Configuration;
+import back.data.CategoryDAO;
 import back.data.ItemDAO;
-import back.data.Limits;
 import back.model.Item;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-import back.conf.Configuration;
 import org.springframework.dao.DataAccessException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ItemsResource extends ServerResource {
-
+public class ItemResource extends ServerResource {
     private final ItemDAO itemDAO = Configuration.getInstance().getItemDAO();
-
-
-    @Override
-    protected Representation get() throws ResourceException {
-        if(getQueryValue("userId").isEmpty()){
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"error in userId parameter");
-        }
-        int userId = Integer.parseInt(getQueryValue("userId"));
-
-        Limits limits = new Limits(0, 100);
-        List<Item> items = itemDAO.getItems(userId, limits);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("start", limits.getStart());
-        map.put("count", limits.getCount());
-        map.put("total", limits.getTotal());
-        map.put("results", items);
-
-        return new JsonMapRepresentation(map);
-    }
-
+    //private final CategoryDAO categoryDAO = Configuration.getInstance().getCategoryDAO();
 
     @Override
-    protected Representation post(Representation entity) throws ResourceException {
-    //NOTE: parameters needed to be passed as raw, for now
-        //Create a new restlet form
+    protected Representation put(Representation entity) throws ResourceException {
+
+        int itemId = Integer.parseInt(getAttribute("id"));
         Form form = new Form(entity);
         System.err.println(form);
-        // categories
-        ArrayList<String> categories = new ArrayList<>();
+        //categories
+        ArrayList<String> newCategories = new ArrayList<>();
         for (int i=0; i<form.size() ; i++){
             if(form.get(i).getName().contains("categories")){
                 System.err.println(form.get(i).getValue());
-                categories.add(form.get(i).getValue());
+                newCategories.add(form.get(i).getValue());
             }
         }
-
         //check the values
         if (    form.getFirstValue("userId") == null || form.getFirstValue("userId").isEmpty()
                 ||form.getFirstValue("name") == null || form.getFirstValue("name").equals("")
-                ||categories.isEmpty()
+                ||newCategories.isEmpty()
                 ||form.getFirstValue("location") == null || form.getFirstValue("location").equals("")
                 ||form.getFirstValue("country") == null || form.getFirstValue("country").equals("")
                 ||form.getFirstValue("buy_price") == null
@@ -73,8 +48,6 @@ public class ItemsResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "missing or empty parameters");
         }
 
-
-
         //extract the values
         long userId = Long.parseLong(form.getFirstValue("userId"));
         String name = form.getFirstValue("name");
@@ -84,11 +57,7 @@ public class ItemsResource extends ServerResource {
         Double latitude = null;
         Double longitude = null;
         String country = form.getFirstValue("country");
-
-        LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        String start = myDateObj.format(myFormatObj);//start time
         String end = LocalDateTime.parse(form.getFirstValue("end")).format(myFormatObj).toString();//end time
         String description = form.getFirstValue("description");
 
@@ -101,25 +70,54 @@ public class ItemsResource extends ServerResource {
             longitude = Double.parseDouble(form.getFirstValue("longitude"));
         }
 
-        Item item = new Item(0, userId, true, name, categories, firstBid, firstBid, buyPrice, 0, location, latitude, longitude, country, start,end, description);
+        Item item;
+
         try{
-            itemDAO.storeItem(item);
+            Optional<Item> itemOptional = itemDAO.getItemById(itemId);
+            if(!itemOptional.isPresent()){
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Item does not exist");
+            }
+            item = itemOptional.get();
+            if(!item.isRunning()){
+                throw  new ResourceException(Status.CLIENT_ERROR_EXPECTATION_FAILED, "Auction is closed");
+            }
+            if(item.getNumberOfBids()>0){
+                throw new ResourceException(Status.CLIENT_ERROR_EXPECTATION_FAILED, "Auction has bids and cannot be edited");
+            }
+
+            item.setName(name);
+            item.setBuyPrice(buyPrice);
+            item.setFirstBid(firstBid);
+            item.setCurrentBid(firstBid);
+            item.setLocation(location);
+            item.setLatitude(latitude);
+            item.setLongitude(longitude);
+            item.setCountry(country);
+            item.setEnd(end);
+            item.setDescription(description);
+
+            itemDAO.updateItem(item);
+
+            List<String> oldCategories = item.getCategories();
+            for (String c: oldCategories) {
+                if(!newCategories.contains(c)){
+                    itemDAO.removeCategoryFromItem(item, c);
+                }
+            }
+            for (String c: newCategories) {
+                if(!oldCategories.contains(c)){
+                    itemDAO.addCategoryToItem(item, c);
+                }
+            }
+            item.setCategories(newCategories);
         }
         catch (DataAccessException e){
-            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "item insertion in database failed");
+            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "item update in database failed");
         }
 
-//        try{
-//            itemDAO.storeItemCategories(item.getId());
-//        }
-//        catch (DataAccessException e){
-//            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "categories insertion in database failed");
-//        }
-
-        Map<String, Object> map = new HashMap<>();
-
+        Map<String,Object> map = new HashMap<>();
         map.put("item", item);
+
         return new JsonMapRepresentation(map);
     }
 }
-
