@@ -120,4 +120,34 @@ public class ItemResource extends ServerResource {
 
         return new JsonMapRepresentation(map);
     }
+
+
+    @Override
+    protected Representation delete() throws ResourceException{
+        long itemId = Long.parseLong(getAttribute("id"));
+         Optional<Item> itemOptional = itemDAO.getItemById(itemId);
+         if(!itemOptional.isPresent()){
+             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "item does not exist");
+         }
+
+         Item item = itemOptional.get();
+         if(!item.isRunning()){
+             throw new ResourceException(Status.CLIENT_ERROR_EXPECTATION_FAILED, "item auction is closed");
+         }
+         if(item.getNumberOfBids()>0){
+             throw new ResourceException(Status.CLIENT_ERROR_EXPECTATION_FAILED, "item auction has bids and cannot be deleted");
+         }
+
+         try{
+             itemDAO.deleteItem(itemId);
+         }
+         catch (DataAccessException e){
+             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "item deletion in database failed");
+         }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("item", item);
+
+        return new JsonMapRepresentation(map);
+    }
 }

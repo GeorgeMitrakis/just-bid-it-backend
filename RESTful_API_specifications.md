@@ -59,12 +59,12 @@
 | POST   | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 
-#### /items/{id} (not implemented)
+#### /items/{id}
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει το αντικείμενο #{id} μαζί με όλες τις προσφορές στη δημοπρασία του   |
 | PUT    | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης επεξεργάζεται τις πληροφορίες της δημοπρασίας #{id} |
-| DELETE | {...} | {...}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης διαγράφει τη δημοπρασία #{id}   |
+| DELETE | - | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης διαγράφει τη δημοπρασία #{id}   |
 
 
 #### /items/{id}/bid
