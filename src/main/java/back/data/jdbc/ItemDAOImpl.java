@@ -39,9 +39,15 @@ public class ItemDAOImpl implements ItemDAO {
 //        dataAccess.storeItemCategories(itemId);
 //    }
 
+//    @Override
+//    public List<Item> searchItems(String searchTerm, String category, String location, Float price){
+//        return dataAccess.searchItems(searchTerm, category, location, price);
+//    }
+
     @Override
-    public List<Item> searchItems(String searchTerm, String category, String location, Float price){
-        return dataAccess.searchItems(searchTerm, category, location, price);
+    public List<Item> searchItems(String searchTerm, String category, String location, Float price, Limits limits){
+        limits.setTotal(dataAccess.countSearchedItems(searchTerm, category, location, price));
+        return dataAccess.searchItems(searchTerm, category, location, price, limits.getStart(),(long) limits.getCount());
     }
 
 //    @Override

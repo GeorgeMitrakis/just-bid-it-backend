@@ -495,7 +495,7 @@ public class DataAccess {
         }
     }
 
-        //item search
+    //search resource
 
     private Object[] appendValue(Object[] obj, Object newObj) {
 
@@ -505,49 +505,76 @@ public class DataAccess {
 
     }
 
-    //TODO: proper full-text search query
-    public List<Item> searchItems(String searchTerm, String category, String location, Float price) throws DataAccessException{
+    private String searchQueryBuild(String searchTerm, String category, String location, Float price){
+        String query = "select item.* from ";
+        //add fulltext search query
+        if(searchTerm!=null){
+            query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) ) as ";
+        }
+        query = query + "item ";
+        if(category!=null){
+            query = query +", just_bid_it.item_categories as item_categories "   ;
+        }
+        if(category!=null || location!=null || price!=null ){
+            query = query+" where ";
+        }
+        if(category!=null){
+            query = query + "item.id = item_categories.item_id and category = ? ";
+            if(location!=null || price!=null){
+                query = query + " and ";
+            }
+        }
+        if(location!=null){
+            query = query + " location = ? ";
+            if(price!=null){
+                query = query + " and ";
+            }
+        }
+        if(price!=null){
+            query = query + "current_bid <= ? ";
+        }
+        if(category!=null){
+            query = query + "group by id ";
+        }
+
+        return query;
+    }
+
+    private Object[] searchParametersBuild(String searchTerm, String category, String location, Float price){
+        Object[] params = new Object[]{};
+        if(searchTerm!=null){
+            params = appendValue(params, searchTerm);
+        }
+        if(category!=null){
+            params = appendValue(params, category);
+        }
+        if(location!=null){
+            params = appendValue(params, location);
+        }
+        if(price!=null){
+            params = appendValue(params, price);
+        }
+        return params;
+    }
+
+
+    public List<Item> searchItems(String searchTerm, String category, String location, Float price, Long start, Long count) throws DataAccessException{
         try{
 
             //build the query
-
-            String query = "select item.* from ";
-            //add fulltext search query
-            if(searchTerm!=null){
-                query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) ) as ";
-            }
-            query = query + "item ";
-            if(category!=null){
-                query = query +", just_bid_it.item_categories as item_categories "   ;
-            }
-            if(category!=null || location!=null || price!=null ){
-                query = query+" where ";
-            }
-            if(category!=null){
-                query = query + "item.id = item_categories.item_id and category = ? ";
-                if(location!=null || price!=null){
-                    query = query + " and ";
-                }
-            }
-            if(location!=null){
-                query = query + " location = ? ";
-                if(price!=null){
-                    query = query + " and ";
-                }
-            }
-            if(price!=null){
-                query = query + "current_bid <= ? ";
-            }
-            if(category!=null){
-                query = query + "group by id";
-            }
+            String query = searchQueryBuild(searchTerm, category, location, price);
+            query = query + "limit ?, ? ";
 
             System.out.println(query);
 
+            //setup the parameters
+            Object[] params = searchParametersBuild(searchTerm, category, location, price);
+            params = appendValue(params, start);
+            params = appendValue(params, count);
 
             List<Item> items;
             List<Map<String,String>> itemCategories;
-            Object[] params = new Object[]{};
+
 
             //get categories
             if(category == null){
@@ -559,25 +586,7 @@ public class DataAccess {
             }
 
             //get items
-            if(searchTerm == null && category== null && location == null && price == null){
-                items = jdbcTemplate.query("select * from just_bid_it.item", new ItemRowMapper(null));
-            }
-            else{
-                if(searchTerm!=null){
-                    params = appendValue(params, searchTerm);
-                }
-                if(category!=null){
-                    params = appendValue(params, category);
-                }
-                if(location!=null){
-                    params = appendValue(params, location);
-                }
-                if(price!=null){
-                    params = appendValue(params, price);
-                }
-
-                items = jdbcTemplate.query(query, params, new ItemRowMapper(null));
-            }
+            items = jdbcTemplate.query(query, params, new ItemRowMapper(null));
 
             //set categories to their items
             setItemCategories(items, itemCategories);
@@ -588,6 +597,50 @@ public class DataAccess {
             System.err.println("Failed to search for items");
             e.printStackTrace();
             throw new DataAccessException("could not search for items"){};
+        }
+    }
+
+    public long countSearchedItems(String searchTerm, String category, String location, Float price) throws DataAccessException{
+        try{
+
+            //build the query
+            String query = searchQueryBuild(searchTerm, category, location, price);
+            query = "select count(*) from ( "+ query + " ) as item ";
+
+            System.out.println(query);
+
+            //setup the parameters
+            Object[] params = searchParametersBuild(searchTerm, category, location, price);
+
+            List<Item> items;
+            //List<Map<String,String>> itemCategories;
+
+
+            //get categories
+//            if(category == null){
+//                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories", new ICRowMapper());
+//            }
+//            else{
+//                String[] catParam = new String[]{category};
+//                itemCategories = jdbcTemplate.query("select * from just_bid_it.item_categories where category = ?",catParam , new ICRowMapper());
+//            }
+
+            //get items
+            if(params.length == 0){
+                return jdbcTemplate.queryForObject(query, Long.class);
+            }
+            else{
+                return jdbcTemplate.queryForObject(query, params, Long.class);
+            }
+            //set categories to their items
+            //setItemCategories(items, itemCategories);
+
+            //return items.size();
+        }
+        catch(Exception e) {
+            System.err.println("Failed to search and count items");
+            e.printStackTrace();
+            throw new DataAccessException("could not search and count items"){};
         }
     }
 
