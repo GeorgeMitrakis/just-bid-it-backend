@@ -26,4 +26,6 @@ public interface ItemDAO {
     void addCategoryToItem(Item item, String category);
 
     void removeCategoryFromItem(Item item, String category);
+
+    void deleteItem(long itemId);
 }

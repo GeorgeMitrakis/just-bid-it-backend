@@ -68,4 +68,9 @@ public class ItemDAOImpl implements ItemDAO {
     public void removeCategoryFromItem(Item item, String category){
         dataAccess.removeCategoryFromItem(item, category);
     }
+
+    @Override
+    public void deleteItem(long itemId){
+        dataAccess.deleteItem(itemId);
+    }
 }

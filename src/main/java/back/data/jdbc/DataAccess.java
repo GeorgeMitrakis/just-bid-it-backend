@@ -427,7 +427,7 @@ public class DataAccess {
         }
     }
 
-    public void addCategoryToItem(Item item, String category){
+    public void addCategoryToItem(Item item, String category) throws DataAccessException{
         try{
 //            jdbcTemplate.update("INSERT IGNORE INTO just_bid_it.category(id, name) VALUES (default, ?) ",
 //                    categories.get(i));
@@ -445,7 +445,7 @@ public class DataAccess {
         }
     }
 
-    public void removeCategoryFromItem(Item item, String category){
+    public void removeCategoryFromItem(Item item, String category) throws DataAccessException{
         try{
             jdbcTemplate.update("delete from just_bid_it.item_categories where (item_id,category) = (?,?)",
                     item.getId(), category);
@@ -454,6 +454,18 @@ public class DataAccess {
             System.err.println("Failed to remove category from item");
             e.printStackTrace();
             throw new DataAccessException("could not remove category from item"){};
+        }
+    }
+
+    public void deleteItem(long itemId) throws DataAccessException{
+        try{
+            jdbcTemplate.update("delete from just_bid_it.item_categories where item_id = ?", itemId);
+            jdbcTemplate.update("delete from just_bid_it.item where id = ?", itemId);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to delete item");
+            e.printStackTrace();
+            throw new DataAccessException("could not delete item"){};
         }
     }
 
@@ -581,7 +593,7 @@ public class DataAccess {
 
     //bid item
 
-    public List<Bid> getFullBidsInfoByItemId(long itemId){
+    public List<Bid> getFullBidsInfoByItemId(long itemId) throws DataAccessException{
         try{
             Long[] params = new Long[]{itemId};
             return jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
