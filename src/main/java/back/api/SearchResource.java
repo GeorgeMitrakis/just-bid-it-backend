@@ -21,11 +21,18 @@ public class SearchResource extends ServerResource {
     @Override
     protected Representation get() throws ResourceException {
         //TODO: paginate results
-//        if(getQueryValue("term") == null
-//        ||getQueryValue("category") == null){
-//            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"missing parameters");
-//        }
+        if(getQueryValue("page_size") == null || getQueryValue("page_size").isEmpty()
+        ||getQueryValue("page_number") == null || getQueryValue("page_number").isEmpty()){
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"missing page parameters");
+        }
 
+        int pageNumber = Integer.parseInt(getQueryValue("page_number"));
+        int pageSize = Integer.parseInt(getQueryValue("page_size"));
+
+        int start = (pageNumber - 1) * pageSize;
+        int count = pageSize;
+
+        Limits limits = new Limits(start, count);
         String searchTerm = getQueryValue("term");
         String category = getQueryValue("category");
         String location = getQueryValue("location");
@@ -47,9 +54,11 @@ public class SearchResource extends ServerResource {
 
 
         //Limits limits = new Limits(0, 50);
-        List<Item> items = itemDAO.searchItems(searchTerm, category, location, price);
+        List<Item> items = itemDAO.searchItems(searchTerm, category, location, price, limits);
         Map<String, Object> map = new HashMap<>();
-        map.put("total", items.size());
+        map.put("start", limits.getStart());
+        map.put("count", limits.getCount());
+        map.put("total", limits.getTotal());
         map.put("items", items);
 
         return new JsonMapRepresentation(map);

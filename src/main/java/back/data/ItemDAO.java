@@ -15,7 +15,9 @@ public interface ItemDAO {
 
     //void storeItemCategories(long itemId);
 
-    List<Item> searchItems(String searchTerm, String category, String location, Float price);
+    //List<Item> searchItems(String searchTerm, String category, String location, Float price);
+
+    List<Item> searchItems(String searchTerm, String category, String location, Float price, Limits limits);
 
 //    void closeAuction(long itemId);
 

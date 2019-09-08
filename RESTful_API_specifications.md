@@ -82,7 +82,7 @@
 #### /search
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | [term, category, location, price] | total, items:[]  |  αναζήτηση ενεργών δημοπρασιών   |
+| GET    | [term, category, location, price], page_number, page_size | total, items:[]  |  αναζήτηση ενεργών δημοπρασιών   |
 
 #### /categories
 | Method | Input | Output | Action |
