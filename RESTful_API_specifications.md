@@ -44,26 +44,26 @@
 #### /admin/users/{username}/accept
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST    | - | user:{id, username,role,access}  |  ο διαχειριστής εγγρίνει στην αίτηση εγγραφής του χρήστη {username}   |
+| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής εγγρίνει στην αίτηση εγγραφής του χρήστη {username}   |
 
 #### /admin/users/{username}/decline
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
+| PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
 
 
 #### /items
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | userId | {total, start, count, results:[]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
-| POST   | name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
+| GET    | userId | {total, start, count, results:[{id, userId, name, running, bids:[{id, amount, bidder, bidderId, bidderRating, itemId, time }], categories:[{category: "Shoes"},{ category:...}, ...], buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
+| POST   | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 
 #### /items/{id} (not implemented)
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει το αντικείμενο #{id} μαζί με όλες τις προσφορές στη δημοπρασία του   |
-| PUT    | {...} | {...}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης επεξεργάζεται τις πληροφορίες της δημοπρασίας #{id} |
+| PUT    | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης επεξεργάζεται τις πληροφορίες της δημοπρασίας #{id} |
 | DELETE | {...} | {...}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης διαγράφει τη δημοπρασία #{id}   |
 
 

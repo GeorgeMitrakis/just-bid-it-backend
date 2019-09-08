@@ -6,27 +6,29 @@ public class Item {
     private long id;
     private final long sellerId;
     private boolean running;
-    private final String name;
+    private String name;
     private List<String> categories;
+    private List<Bid> bids;
     private float currentBid;
-    private final float firstBid;
-    private final float buyPrice;
+    private float firstBid;
+    private float buyPrice;
     private int numberOfBids;
-    private final String location;
-    private final Double latitude;
-    private final Double longitude;
-    private final String country;
+    private String location;
+    private Double latitude;
+    private Double longitude;
+    private String country;
     private final String start;
-    private final String end;
-    private final String description;
+    private String end;
+    private String description;
 
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.categories = categories;
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -40,12 +42,13 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name,  List<String> categories, float currentBid, float firstBid, float buyPrice,  int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
         this.running = running;
         this.name = name;
         this.categories = categories;
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -59,10 +62,52 @@ public class Item {
         this.description = description;
     }
 
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
+        this.name = name;
+        this.categories = categories;
+        this.bids = null;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.country = country;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
 
+    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.running = running;
+        this.name = name;
+        this.categories = categories;
+        this.bids = null;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = null;
+        this.longitude = null;
+        this.country = country;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setRunning(boolean running) {
@@ -73,12 +118,48 @@ public class Item {
         this.categories = categories;
     }
 
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
     public void setCurrentBid(float currentBid) {
         this.currentBid = currentBid;
     }
 
     public void setNumberOfBids(int numberOfBids) {
         this.numberOfBids = numberOfBids;
+    }
+
+    public void setFirstBid(float firstBid) {
+        this.firstBid = firstBid;
+    }
+
+    public void setBuyPrice(float buyPrice) {
+        this.buyPrice = buyPrice;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public long getId() {
@@ -100,6 +181,11 @@ public class Item {
     public List<String> getCategories() {
         return categories;
     }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
     public float getCurrentBid() {
         return currentBid;
     }

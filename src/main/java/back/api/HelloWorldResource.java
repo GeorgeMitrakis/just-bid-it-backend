@@ -14,4 +14,9 @@ public class HelloWorldResource extends ServerResource {
     protected Representation get() throws ResourceException {
         return JsonMapRepresentation.forSimpleResult("Hello world!");
     }
+
+    @Override
+    protected Representation put(Representation entity) throws ResourceException{
+        return JsonMapRepresentation.forSimpleResult("no CORS!");
+    }
 }

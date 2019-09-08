@@ -18,6 +18,7 @@ public class RestfulApp extends Application {
 		CorsService corsService = new CorsService();
 		corsService.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
 		corsService.setAllowedCredentials(true);
+		corsService.setSkippingResourceForCorsOptions(true);
 		getServices().add(corsService);
 	}
 
@@ -59,8 +60,8 @@ public class RestfulApp extends Application {
 		//GET, POST (common user)
 		router.attach("/items", ItemsResource.class);
 
-//		//GET, PUT, DELETE (common user)
-//		router.attach("/items/{id}", );
+		//GET, PUT, DELETE (common user)
+		router.attach("/items/{id}", ItemResource.class);
 
 		//POST (common user)
 		router.attach("/items/{id}/bid", ItemBidResource.class);

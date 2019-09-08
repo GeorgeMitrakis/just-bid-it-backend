@@ -1,11 +1,13 @@
 package back.data.jdbc;
 
+import back.api.JsonMapRepresentation;
 import back.model.Bid;
 import back.model.CommonUser;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import back.model.User;
 import back.model.Item;
@@ -231,6 +233,28 @@ public class DataAccess {
         }
     }
 
+    private void setItemBids(List<Item> items, List<Bid> itemBids){
+        System.err.println(items.size());
+        System.err.println(itemBids.size());
+
+        Map<Long, List<Bid>> map = new HashMap<>();
+        List<Bid> l;
+        for (Bid b: itemBids) {
+            l = map.get(b.getItemId());
+            if(l == null){
+                l = new ArrayList<>();
+                map.put(b.getItemId(), l);
+            }
+            l.add(b);
+        }
+        System.err.println(map);
+        System.err.println(map.size());
+        for (Item item : items) {
+            item.setBids(map.get(item.getId()));
+        }
+        System.err.println(new JsonMapRepresentation(map));
+    }
+
     public long countItems() {
         return jdbcTemplate.queryForObject("select count(*) from just_bid_it.item", Long.class);
     }
@@ -252,6 +276,17 @@ public class DataAccess {
 
         setItemCategories(items, itemCategories);
 
+        Long[] bidParams = new Long[1];
+        bidParams[0] = (long) userId;
+        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+                "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
+                "where bid.item_id = item.id " +
+                "and bid.bidder_id = common_user.id " +
+                "and user.id = common_user.id " +
+                "and item.seller_id = ?", bidParams, new BidRowMapper());
+
+
+        setItemBids(items, itemBids);
         return items;
     }
 
@@ -362,6 +397,63 @@ public class DataAccess {
             System.err.println("Failed to update current_bid in item");
             e.printStackTrace();
             throw new DataAccessException("could not update current_bid in item"){};
+        }
+    }
+
+    // /items/{id} resource
+    public void updateItem(Item item) throws DataAccessException{
+        try{
+            jdbcTemplate.update("update just_bid_it.item " +
+                    "set " +
+                    "item.name = ? , " +
+                    "item.buy_price = ?, " +
+                    "item.first_bid = ?, " +
+                    "item.current_bid = ?, " +
+                    "item.location = ?, " +
+                    "item.latitude = ?, " +
+                    "item.longitude = ?, " +
+                    "item.country = ?, " +
+                    "item.end = ?, " +
+                    "item.description = ? " +
+                    "where item.id = ? ",
+                    item.getName(), item.getBuyPrice(), item.getFirstBid(), item.getCurrentBid(), item.getLocation(),
+                    item.getLatitude(),  item.getLongitude(), item.getCountry(), item.getEnd(), item.getDescription(),
+                    item.getId());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to update item");
+            e.printStackTrace();
+            throw new DataAccessException("could not update item"){};
+        }
+    }
+
+    public void addCategoryToItem(Item item, String category){
+        try{
+//            jdbcTemplate.update("INSERT IGNORE INTO just_bid_it.category(id, name) VALUES (default, ?) ",
+//                    categories.get(i));
+//            jdbcTemplate.update("INSERT INTO just_bid_it.item_categories(item_id, category) VALUES (?, ?) ",
+//                    itemId, categories.get(i));
+//
+            jdbcTemplate.update("insert ignore into just_bid_it.category(id, name) values (default, ?)", category);
+            jdbcTemplate.update("insert ignore into just_bid_it.item_categories(item_id, category) values (?, ?) ",item.getId(), category);
+
+        }
+        catch(Exception e) {
+            System.err.println("Failed to add category to item");
+            e.printStackTrace();
+            throw new DataAccessException("could not add category to item"){};
+        }
+    }
+
+    public void removeCategoryFromItem(Item item, String category){
+        try{
+            jdbcTemplate.update("delete from just_bid_it.item_categories where (item_id,category) = (?,?)",
+                    item.getId(), category);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to remove category from item");
+            e.printStackTrace();
+            throw new DataAccessException("could not remove category from item"){};
         }
     }
 
@@ -488,6 +580,23 @@ public class DataAccess {
     }
 
     //bid item
+
+    public List<Bid> getFullBidsInfoByItemId(long itemId){
+        try{
+            Long[] params = new Long[]{itemId};
+            return jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+                    "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user " +
+                    "where bid.item_id = ? " +
+                    "and bid.bidder_id = common_user.id " +
+                    "and user.id = common_user.id", params, new BidRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get bid list from the database");
+            e.printStackTrace();
+            throw new DataAccessException("could not get bid list from the database"){};
+        }
+    }
+
     public void storeBid(Bid bid) throws DataAccessException{
         try{
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -500,8 +609,29 @@ public class DataAccess {
                 ps.setFloat(4, bid.getAmount());
                 return ps;
             },keyHolder);
+
             long id =  keyHolder.getKey().longValue();
             bid.setId(id);
+
+            String bidder  = jdbcTemplate.query("select user.username " +
+                    "from just_bid_it.user , just_bid_it.bid " +
+                    "where user.id = bid.bidder_id " +
+                    "and bid.bidder_id = "+bid.getBidderId(),
+                    (rs, rowNum)-> rs.getString("username")
+                    ).get(0);
+
+            bid.setBidder(bidder);
+
+            Integer bidderRating  = jdbcTemplate.query("select common_user.bidder_rating " +
+                            "from just_bid_it.common_user , just_bid_it.bid " +
+                            "where common_user.id = bid.bidder_id " +
+                            "and bid.bidder_id = "+bid.getBidderId(),
+                    (rs, rowNum)-> rs.getInt("bidder_rating")
+            ).get(0);
+
+            bid.setBidderRating(bidderRating);
+
+
         }
         catch(Exception e) {
             System.err.println("Failed to insert bid in the database");

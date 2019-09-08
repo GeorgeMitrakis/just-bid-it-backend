@@ -20,4 +20,10 @@ public interface ItemDAO {
 //    void closeAuction(long itemId);
 
     void updateCurrentBid(long itemId, float amount);
+
+    void updateItem(Item item);
+
+    void addCategoryToItem(Item item, String category);
+
+    void removeCategoryFromItem(Item item, String category);
 }
