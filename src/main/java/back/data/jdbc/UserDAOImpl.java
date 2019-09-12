@@ -74,4 +74,10 @@ public class UserDAOImpl implements UserDAO {
     public void denyUserAccess(String username){
         dataAccess.denyUserAccess(username);
     }
+
+
+    @Override
+    public List<String> getUsernamesLike(String username){
+        return dataAccess.getUsernamesLike(username);
+    }
 }

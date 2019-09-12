@@ -106,16 +106,16 @@
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει ή στείλει   |
 
 
-#### /messages/sent (not implemented)
+#### /messages/sent
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
+| GET    | userId | {total, messages : [{id, sender, receiver, text}, ...]}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
 
 
-#### /messages/received (not implemented)
+#### /messages/received
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει   |
+| GET    | userId | {total, messages : [{id, sender, receiver, text}, ...]}    |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει   |
 
 
 #### /messages/{id} (not implemented)
@@ -129,7 +129,12 @@
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα μεταξύ αυτού και του χρήστη {username}   |
 
-#### /messages/{username}/send (not implemented)
+#### /messages/{username}/send
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | {...} | {...}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
+| POST   | userId, text | message:{id, sender, receiver, text}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
+
+#### /usernames
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| GET    | username | usernames:[]  |  ο χρήστης παίρνει όλα τα usernames που αρχίζουν με την παράμετρο που δίνει    |

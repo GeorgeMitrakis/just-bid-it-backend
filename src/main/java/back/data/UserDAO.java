@@ -30,4 +30,6 @@ public interface UserDAO {
 
     void denyUserAccess(String username);
 
+    List<String> getUsernamesLike(String username);
+
 }

@@ -1,16 +1,13 @@
 package back.data.jdbc;
 
 import back.api.JsonMapRepresentation;
-import back.model.Bid;
-import back.model.CommonUser;
+import back.model.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import back.model.User;
-import back.model.Item;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
@@ -199,6 +196,19 @@ public class DataAccess {
             throw new DataAccessException("could not deny access to user"){};
         }
 
+    }
+
+    List<String> getUsernamesLike(String prefix) throws DataAccessException{
+        try{
+            String[] params = new String[]{prefix+"%"};
+            return jdbcTemplate.query("SELECT username from just_bid_it.user where username like ? ", params, new UsernameRowMapper());
+
+        }
+        catch (Exception e) {
+            System.err.println("Failed to getUsernamesLike");
+            e.printStackTrace();
+            throw new DataAccessException("could not getUsernamesLike"){};
+        }
     }
 
     //items resource
@@ -704,5 +714,76 @@ public class DataAccess {
             throw new DataAccessException("could not insert bid in the database"){};
         }
 
+    }
+
+
+    //messages
+    public List<Message> getSentMessages(long userId){
+        try{
+            Long[] params = new Long[]{userId};
+            return jdbcTemplate.query("select message.*, user.username as receiver_username " +
+                            "from( " +
+                            "        select message.*, user.username as sender_username " +
+                            "        from just_bid_it.message, just_bid_it.common_user, just_bid_it.user " +
+                            "        where message.sender_id = ? " +
+                            "          and message.sender_id = common_user.id " +
+                            "          and common_user.id = user.id " +
+                            "        ) as message, just_bid_it.user, just_bid_it.common_user " +
+                            "where  message.receiver_id = common_user.id " +
+                            "  and common_user.id = user.id ",
+                    params, new MessageRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get sent messages");
+            e.printStackTrace();
+            throw new DataAccessException("could not get sent messages"){};
+        }
+    }
+
+    public List<Message> getReceivedMessages(long userId){
+        try{
+            Long[] params = new Long[]{userId};
+            return jdbcTemplate.query("select message.*, user.username as sender_username " +
+                            "from( " +
+                            "        select message.*, user.username as receiver_username " +
+                            "        from just_bid_it.message, just_bid_it.common_user, just_bid_it.user " +
+                            "        where message.receiver_id = ? " +
+                            "          and message.receiver_id = common_user.id " +
+                            "          and common_user.id = user.id " +
+                            "        ) as message, just_bid_it.user, just_bid_it.common_user " +
+                            "where  message.sender_id = common_user.id " +
+                            "  and common_user.id = user.id ",
+                    params, new MessageRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get received messages");
+            e.printStackTrace();
+            throw new DataAccessException("could not get received messages"){};
+        }
+    }
+
+    public void storeMessage(Message message){
+        try{
+            String[] p1 = new String[]{message.getSender()};
+            Integer senderId = jdbcTemplate.queryForObject("select user.id from just_bid_it.user where username = ? ",p1, Integer.class);
+            String[] p2 = new String[]{message.getReceiver()};
+            Integer receiverId = jdbcTemplate.queryForObject("select user.id from just_bid_it.user where username = ? ",p2, Integer.class);
+
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text) VALUES (default,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, senderId);
+                ps.setInt(2, receiverId);
+                ps.setString(3, message.getText());
+                return ps;
+            },keyHolder);
+
+            message.setId(keyHolder.getKey().intValue());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to post message");
+            e.printStackTrace();
+            throw new DataAccessException("could not post message"){};
+        }
     }
 }

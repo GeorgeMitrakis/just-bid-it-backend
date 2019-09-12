@@ -75,4 +75,8 @@ public class Configuration {
     public LocationDAO getLocationDAO(){
         return new LocationDAOImpl(dataAccess);
     }
+
+    public MessageDAO getMessageDAO(){
+        return new MessageDAOImpl(dataAccess);
+    }
 }
