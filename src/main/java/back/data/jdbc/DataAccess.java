@@ -198,6 +198,19 @@ public class DataAccess {
 
     }
 
+    List<String> getUsernamesLike(String prefix) throws DataAccessException{
+        try{
+            String[] params = new String[]{prefix+"%"};
+            return jdbcTemplate.query("SELECT username from just_bid_it.user where username like ? ", params, new UsernameRowMapper());
+
+        }
+        catch (Exception e) {
+            System.err.println("Failed to getUsernamesLike");
+            e.printStackTrace();
+            throw new DataAccessException("could not getUsernamesLike"){};
+        }
+    }
+
     //items resource
     private Map<String,List<String>> ListToMapConverter(List<Map<String,String>> l){
         Map<String,List<String>> m = new HashMap<>();

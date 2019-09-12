@@ -75,6 +75,9 @@ public class RestfulApp extends Application {
 //		//GET (common user)
 //		router.attach("/messages", );
 
+		//GET
+		router.attach("/usernames", UsernameAutocompleteResource.class);
+
 		//GET (common user)
 		router.attach("/messages/sent", MessagesSentResource.class);
 

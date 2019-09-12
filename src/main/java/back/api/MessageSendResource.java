@@ -37,7 +37,7 @@ public class MessageSendResource extends ServerResource {
 
         Optional<User> userOptional = userDAO.getUserById(userId);
         if(!userOptional.isPresent()){
-            throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "sender not found");
+            throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
         }
 
         Message message = new Message(0, userOptional.get().getUsername(), receiver, text);

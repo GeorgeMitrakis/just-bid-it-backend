@@ -133,3 +133,8 @@
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | POST   | userId, text | message:{id, sender, receiver, text}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
+
+#### /usernames
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| GET    | username | usernames:[]  |  ο χρήστης παίρνει όλα τα usernames που αρχίζουν με την παράμετρο που δίνει    |
