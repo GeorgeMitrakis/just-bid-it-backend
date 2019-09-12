@@ -112,10 +112,10 @@
 | GET    | userId | {total, messages : [{id, sender, receiver, text}, ...]}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
 
 
-#### /messages/received (not implemented)
+#### /messages/received
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει   |
+| GET    | userId | {total, messages : [{id, sender, receiver, text}, ...]}    |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει   |
 
 
 #### /messages/{id} (not implemented)

@@ -78,8 +78,8 @@ public class RestfulApp extends Application {
 		//GET (common user)
 		router.attach("/messages/sent", MessagesSentResource.class);
 
-//		//GET (common user)
-//		router.attach("/messages/received", );
+		//GET (common user)
+		router.attach("/messages/received", MessagesReceivedResource.class);
 
 //		//GET (common user)
 //		router.attach("/messages/{id}", );
