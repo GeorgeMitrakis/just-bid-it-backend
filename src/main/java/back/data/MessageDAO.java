@@ -8,4 +8,6 @@ public interface MessageDAO {
     List<Message> getSentMessages(long userId);
 
     List<Message> getReceivedMessages(long userId);
+
+    void storeMessage(Message message);
 }

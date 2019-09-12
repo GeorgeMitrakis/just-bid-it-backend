@@ -87,8 +87,8 @@ public class RestfulApp extends Application {
 //		//GET (common user)
 //		router.attach("/messages/{username}", );
 
-//		//POST (common user)
-//		router.attach("/messages/{username}/send", );
+		//POST (common user)
+		router.attach("/messages/{username}/send", MessageSendResource.class);
 
 		return router;
 	}

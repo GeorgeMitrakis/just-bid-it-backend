@@ -129,7 +129,7 @@
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα μεταξύ αυτού και του χρήστη {username}   |
 
-#### /messages/{username}/send (not implemented)
+#### /messages/{username}/send
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | {...} | {...}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
+| POST   | userId, text | message:{id, sender, receiver, text}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |

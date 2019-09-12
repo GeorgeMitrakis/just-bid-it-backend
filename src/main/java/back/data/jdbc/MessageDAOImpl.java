@@ -23,4 +23,9 @@ public class MessageDAOImpl implements MessageDAO {
     public List<Message> getReceivedMessages(long userId){
         return dataAccess.getReceivedMessages(userId);
     }
+
+    @Override
+    public void storeMessage(Message message){
+        dataAccess.storeMessage(message);
+    }
 }

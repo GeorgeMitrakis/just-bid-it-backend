@@ -33,8 +33,8 @@ public class MessagesSentResource extends ServerResource {
         }
 
         Map<String,Object> map = new HashMap<>();
-        map.put("total:", messages.size());
-        map.put("messages:", messages);
+        map.put("total", messages.size());
+        map.put("messages", messages);
 
         return new JsonMapRepresentation(map);
     }
