@@ -106,10 +106,10 @@
 | GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει λάβει ή στείλει   |
 
 
-#### /messages/sent (not implemented)
+#### /messages/sent
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| GET    | {...} | {...}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
+| GET    | userId | {total, messages : [{id, sender, receiver, text}, ...]}  |  ο χρήστης παίρνει όλα τα μηνύματα που έχει στείλει   |
 
 
 #### /messages/received (not implemented)

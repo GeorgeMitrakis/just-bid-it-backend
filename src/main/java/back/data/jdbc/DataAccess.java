@@ -1,16 +1,13 @@
 package back.data.jdbc;
 
 import back.api.JsonMapRepresentation;
-import back.model.Bid;
-import back.model.CommonUser;
+import back.model.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import back.model.User;
-import back.model.Item;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
@@ -704,5 +701,51 @@ public class DataAccess {
             throw new DataAccessException("could not insert bid in the database"){};
         }
 
+    }
+
+
+    //messages
+    public List<Message> getSentMessages(long userId){
+        try{
+            Long[] params = new Long[]{userId};
+            return jdbcTemplate.query("select message.*, user.username as receiver_username " +
+                            "from(\n" +
+                            "        select message.*, user.username as sender_username " +
+                            "        from message, common_user, user " +
+                            "        where message.sender_id = ? " +
+                            "          and message.sender_id = common_user.id " +
+                            "          and common_user.id = user.id " +
+                            "        ) as message, user, common_user " +
+                            "where  message.receiver_id = common_user.id " +
+                            "  and common_user.id = user.id ",
+                    params, new MessageRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get sent messages");
+            e.printStackTrace();
+            throw new DataAccessException("could not get sent messages"){};
+        }
+    }
+
+    public List<Message> getReceivedMessages(long userId){
+        try{
+            Long[] params = new Long[]{userId};
+            return jdbcTemplate.query("select message.*, user.username as sender_username " +
+                            "from(\n" +
+                            "        select message.*, user.username as receiver_username " +
+                            "        from message, common_user, user " +
+                            "        where message.receiver_id = ? " +
+                            "          and message.receiver_id = common_user.id " +
+                            "          and common_user.id = user.id " +
+                            "        ) as message, user, common_user " +
+                            "where  message.sender_id = common_user.id " +
+                            "  and common_user.id = user.id ",
+                    params, new MessageRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to get received messages");
+            e.printStackTrace();
+            throw new DataAccessException("could not get received messages"){};
+        }
     }
 }
