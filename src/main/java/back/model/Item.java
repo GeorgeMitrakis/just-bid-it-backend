@@ -1,26 +1,48 @@
 package back.model;
 
 import java.util.List;
+import javax.xml.bind.annotation.*;
 
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Item {
+    @XmlElement(name="ItemID")
     private long id;
-    private final long sellerId;
+    @XmlElement
+    private long sellerId;
+    @XmlElement
     private boolean running;
+    @XmlElement
     private String name;
+    @XmlElement
     private List<String> categories;
+    @XmlElement
     private List<Bid> bids;
+    @XmlElement
     private float currentBid;
+    @XmlElement
     private float firstBid;
+    @XmlElement
     private float buyPrice;
+    @XmlElement
     private int numberOfBids;
+    @XmlElement
     private String location;
+    @XmlElement
     private Double latitude;
+    @XmlElement
     private Double longitude;
+    @XmlElement
     private String country;
-    private final String start;
+    @XmlElement
+    private String start;
+    @XmlElement
     private String end;
+    @XmlElement
     private String description;
 
+    public Item() {
+    }
 
     public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
