@@ -51,6 +51,10 @@
 | ------ | ----- | ------ | ------ |
 | PUT    | - | user:{id, username,role,access}  |  ο διαχειριστής απορρίπτει στην αίτηση εγγραφής του χρήστη {username}   |
 
+#### /admin/download/json
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| GET    | - | items:[]  |  ο διαχειριστής παίρνει όλα τα Items σε JSON   |
 
 #### /items
 | Method | Input | Output | Action |

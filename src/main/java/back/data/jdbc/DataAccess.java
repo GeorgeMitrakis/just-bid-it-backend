@@ -273,7 +273,7 @@ public class DataAccess {
         Long[] params = new Long[]{(long) userId, start, count};
         Long[] categoryParams = new Long[1];
         List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper(null));
-        List<String> categories;
+//        List<String> categories;
 //        for(int i=0 ; i<items.size() ; i++){
 //            categoryParams[0] = items.get(i).getId();
 //            categories = jdbcTemplate.query("select * from just_bid_it.item_categories where item_id = ?", categoryParams, new ItemCategoriesRowMapper());
@@ -297,6 +297,19 @@ public class DataAccess {
 
 
         setItemBids(items, itemBids);
+        return items;
+    }
+
+    public List<Item> getAllItems(){
+        List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item ", new ItemRowMapper(null));
+        List<Map<String,String>> itemCategories = jdbcTemplate.query("select * from item_categories", new ICRowMapper());
+        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+                "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
+                "where bid.item_id = item.id and bid.bidder_id = common_user.id and user.id = common_user.id ", new BidRowMapper());
+
+        setItemCategories(items, itemCategories);
+        setItemBids(items, itemBids);
+
         return items;
     }
 
