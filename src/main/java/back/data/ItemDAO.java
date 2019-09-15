@@ -9,6 +9,8 @@ public interface ItemDAO {
 
     List<Item> getItems(int userId, Limits limits);
 
+    List<Item> getAllItems();
+
     Optional<Item> getItemById(long id);
 
     void storeItem(Item item);

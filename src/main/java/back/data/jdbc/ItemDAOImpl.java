@@ -25,6 +25,11 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
+    public List<Item> getAllItems(){
+        return dataAccess.getAllItems();
+    }
+
+    @Override
     public Optional<Item> getItemById(long id) {
         return dataAccess.getItemById(id);
     }
