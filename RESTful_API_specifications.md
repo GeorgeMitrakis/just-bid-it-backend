@@ -144,6 +144,11 @@
 | ------ | ----- | ------ | ------ |
 | POST   | userId, text | message:{id, sender, receiver, text}  |  ο χρήστης στέλνει μήνυμα στον χρήστη {username}   |
 
+#### /messages/{id}/delete
+| Method | Input | Output | Action |
+| ------ | ----- | ------ | ------ |
+| DELETE | - | message:{id, sender_id, receiver_id, text}  |  ο χρήστης διαγράφει το μήνυμα #{id}   |
+
 #### /usernames
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
