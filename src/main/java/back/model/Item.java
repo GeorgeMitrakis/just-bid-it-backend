@@ -6,47 +6,69 @@ import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Item {
-    @XmlElement(name="ItemID")
+    @XmlAttribute(name="ItemID")
     private long id;
-    @XmlElement
+
+    @XmlElement(name="SellerID")
     private long sellerId;
-    @XmlElement
+
+    @XmlElement(name="Seller")
+    private Seller seller;
+
+    @XmlTransient
     private boolean running;
-    @XmlElement
+
+    @XmlElement(name="Name")
     private String name;
-    @XmlElement
+
+    @XmlElement(name="Category")
     private List<String> categories;
-    @XmlElement
+
+    @XmlElement(name="Bid")
     private List<Bid> bids;
-    @XmlElement
+
+    @XmlElement(name="Current_Bid")
     private float currentBid;
-    @XmlElement
+
+    @XmlElement(name="First_Bid")
     private float firstBid;
-    @XmlElement
+
+    @XmlElement(name="Buy_Price")
     private float buyPrice;
-    @XmlElement
+
+    @XmlElement(name="Number_of_Bids")
     private int numberOfBids;
-    @XmlElement
+
+    @XmlElement(name="Location")
     private String location;
-    @XmlElement
+
+    @XmlElement(name="Latitude")
     private Double latitude;
-    @XmlElement
+
+    @XmlElement(name="Longitude")
     private Double longitude;
-    @XmlElement
+
+    @XmlElement(name="Country")
     private String country;
-    @XmlElement
+
+    @XmlElement(name="Started")
     private String start;
-    @XmlElement
+
+    @XmlElement(name="Ends")
     private String end;
-    @XmlElement
+
+    @XmlElement(name="Description")
     private String description;
 
     public Item() {
     }
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+
+
+    public Item(long id, long sellerId, Seller seller, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
+        this.seller = seller;
         this.running = running;
         this.name = name;
         this.categories = categories;
@@ -67,6 +89,7 @@ public class Item {
     public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
+        this.seller = null;
         this.running = running;
         this.name = name;
         this.categories = categories;
@@ -84,9 +107,31 @@ public class Item {
         this.description = description;
     }
 
+    public Item(long id, long sellerId, Seller seller, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+        this.id = id;
+        this.sellerId = sellerId;
+        this.seller = seller;
+        this.running = running;
+        this.name = name;
+        this.categories = categories;
+        this.bids = null;
+        this.currentBid = currentBid;
+        this.firstBid = firstBid;
+        this.buyPrice = buyPrice;
+        this.numberOfBids = numberOfBids;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.country = country;
+        this.start = start;
+        this.end = end;
+        this.description = description;
+    }
+
     public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
+        this.seller = null;
         this.running = running;
         this.name = name;
         this.categories = categories;
@@ -107,6 +152,7 @@ public class Item {
     public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
         this.sellerId = sellerId;
+        this.seller = null;
         this.running = running;
         this.name = name;
         this.categories = categories;
@@ -152,6 +198,10 @@ public class Item {
         this.numberOfBids = numberOfBids;
     }
 
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
     public void setFirstBid(float firstBid) {
         this.firstBid = firstBid;
     }
@@ -190,6 +240,10 @@ public class Item {
 
     public long getSellerId() {
         return sellerId;
+    }
+
+    public Seller getSeller() {
+        return seller;
     }
 
     public boolean isRunning() {

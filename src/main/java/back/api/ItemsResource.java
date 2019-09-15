@@ -32,7 +32,7 @@ public class ItemsResource extends ServerResource {
         }
         int userId = Integer.parseInt(getQueryValue("userId"));
 
-        Limits limits = new Limits(0, 100);
+        Limits limits = new Limits(0, 100000);
         List<Item> items = itemDAO.getItems(userId, limits);
 
         Map<String, Object> map = new HashMap<>();

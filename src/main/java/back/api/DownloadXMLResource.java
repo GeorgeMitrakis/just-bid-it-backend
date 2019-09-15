@@ -20,13 +20,7 @@ public class DownloadXMLResource extends ServerResource {
     protected Representation get() throws ResourceException {
         Items items = new  Items(itemDAO.getAllItems());
 
-        try {
-            new ItemsToXml(items).objectToXml();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        Map<String,Object> map = new HashMap<>();
-        map.put("items", items);
+
         return new XMLRepresentation(items);
     }
 }

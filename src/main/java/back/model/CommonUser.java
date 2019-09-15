@@ -37,6 +37,19 @@ public class CommonUser extends  User {
         this.bidderRating = bidderRating;
     }
 
+    public CommonUser(CommonUser user){
+        super(user.getId(), user.getUsername(), "common user", user.getAccess());
+        this.firstname = user.getFirstname();
+        this.lastname = user.getLastname();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.country = user.getCountry();
+        this.location = user.getLocation();
+        this.taxRegistrationNumber = user.getTaxRegistrationNumber();
+        this.sellerRating = user.getSellerRating();
+        this.bidderRating = user.getBidderRating();
+    }
+
     public String getFirstname() {
         return firstname;
     }
