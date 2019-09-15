@@ -1,5 +1,6 @@
 package back.data.jdbc;
 
+import back.model.Seller;
 import org.springframework.jdbc.core.RowMapper;
 import back.model.Item;
 
@@ -37,9 +38,11 @@ public class ItemRowMapper implements RowMapper<Item>{
             isRunning = true;
         }
 
+        Seller seller = new Seller(rs.getString("username"), rs.getLong("seller_id"), rs.getInt("seller_rating"));
         return new Item(
                 rs.getInt("id"),
                 rs.getInt("seller_id"),
+                seller,
                 isRunning,
                 rs.getString("name"),
                 this.categories,

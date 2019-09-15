@@ -243,7 +243,7 @@ public class DataAccess {
         }
     }
 
-    private void setItemBids(List<Item> items, List<Bid> itemBids){
+    private void setItemsBids(List<Item> items, List<Bid> itemBids){
         System.err.println(items.size());
         System.err.println(itemBids.size());
 
@@ -265,6 +265,10 @@ public class DataAccess {
         System.err.println(new JsonMapRepresentation(map));
     }
 
+    public void setItemsSeller(List<Item> items, List<Seller> sellers){
+
+    }
+
     public long countItems() {
         return jdbcTemplate.queryForObject("select count(*) from just_bid_it.item", Long.class);
     }
@@ -272,7 +276,12 @@ public class DataAccess {
     public List<Item> getItems(int userId, long start, long count) {
         Long[] params = new Long[]{(long) userId, start, count};
         Long[] categoryParams = new Long[1];
-        List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item where seller_id = ? limit ?, ?", params, new ItemRowMapper(null));
+        List<Item> items =  jdbcTemplate.query("select item.*, user.username, common_user.seller_rating " +
+                "from just_bid_it.item, just_bid_it.user, just_bid_it.common_user " +
+                "where item.seller_id = ? " +
+                "and item.seller_id = user.id " +
+                "and user.id = common_user.id " +
+                "limit ?, ?", params, new ItemRowMapper(null));
 //        List<String> categories;
 //        for(int i=0 ; i<items.size() ; i++){
 //            categoryParams[0] = items.get(i).getId();
@@ -296,19 +305,20 @@ public class DataAccess {
                 "and item.seller_id = ?", bidParams, new BidRowMapper());
 
 
-        setItemBids(items, itemBids);
+        setItemsBids(items, itemBids);
         return items;
     }
 
     public List<Item> getAllItems(){
-        List<Item> items =  jdbcTemplate.query("select * from just_bid_it.item ", new ItemRowMapper(null));
+        List<Item> items =  jdbcTemplate.query("select item.*, user.username, common_user.seller_rating from just_bid_it.item, just_bid_it.user, just_bid_it.common_user " +
+                "where user.id = common_user.id and user.id = item.seller_id", new ItemRowMapper(null));
         List<Map<String,String>> itemCategories = jdbcTemplate.query("select * from item_categories", new ICRowMapper());
         List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
                 "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
                 "where bid.item_id = item.id and bid.bidder_id = common_user.id and user.id = common_user.id ", new BidRowMapper());
 
         setItemCategories(items, itemCategories);
-        setItemBids(items, itemBids);
+        setItemsBids(items, itemBids);
 
         return items;
     }
@@ -321,7 +331,8 @@ public class DataAccess {
             return Optional.empty();
         }
         //append them to the item
-        List<Item> items = jdbcTemplate.query("select * from just_bid_it.item where id = ?", params, new ItemRowMapper(categories));
+        List<Item> items = jdbcTemplate.query("select item.*, user.username, common_user.seller_rating from just_bid_it.item, just_bid_it.user, just_bid_it.common_user " +
+                " where item.id = ? and user.id = common_user.id and item.seller_id = user.id", params, new ItemRowMapper(categories));
         if (items.size() != 1) {
             return Optional.empty();
         }
@@ -529,17 +540,18 @@ public class DataAccess {
     }
 
     private String searchQueryBuild(String searchTerm, String category, String location, Float price){
-        String query = "select item.* from ";
+        String query = "select item.*, user.username, common_user.seller_rating from ";
         //add fulltext search query
         if(searchTerm!=null){
             query = query + "(select item.* from just_bid_it.item where match(name, description) against(? in natural language mode ) ) as ";
         }
-        query = query + "item ";
+        query = query + "item, user, common_user ";
         if(category!=null){
             query = query +", just_bid_it.item_categories as item_categories "   ;
         }
+        query = query + " where item.seller_id = user.id and user.id = common_user.id ";
         if(category!=null || location!=null || price!=null ){
-            query = query+" where ";
+            query = query+" and ";
         }
         if(category!=null){
             query = query + "item.id = item_categories.item_id and category = ? ";
@@ -557,7 +569,7 @@ public class DataAccess {
             query = query + "current_bid <= ? ";
         }
         if(category!=null){
-            query = query + "group by id ";
+            query = query + "group by item.id ";
         }
 
         return query;
