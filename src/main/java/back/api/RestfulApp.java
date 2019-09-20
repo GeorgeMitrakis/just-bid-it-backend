@@ -99,6 +99,8 @@ public class RestfulApp extends Application {
 		//POST (common user)
 		router.attach("/messages/{username}/send", MessageSendResource.class);
 
+		//DELETE
+		router.attach("/messages/{id}/delete", MessageDeleteResource.class);
 
 		return router;
 	}

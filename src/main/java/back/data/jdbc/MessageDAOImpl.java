@@ -28,4 +28,14 @@ public class MessageDAOImpl implements MessageDAO {
     public void storeMessage(Message message){
         dataAccess.storeMessage(message);
     }
+
+    @Override
+    public Message getMessage(int messageId){
+        return dataAccess.getMessage(messageId);
+    }
+
+    @Override
+    public void deleteMessage(int messageId){
+        dataAccess.deleteMessage(messageId);
+    }
 }

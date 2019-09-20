@@ -6,7 +6,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -809,6 +808,36 @@ public class DataAccess {
             System.err.println("Failed to post message");
             e.printStackTrace();
             throw new DataAccessException("could not post message"){};
+        }
+    }
+
+    public Message getMessage(int messageId){
+        Integer[] params = new Integer[]{messageId};
+        try{
+            return jdbcTemplate.queryForObject("select message.*, user.username as sender_username " +
+                    "from( " +
+                    "        select message.*, user.username as receiver_username " +
+                    "        from just_bid_it.message, just_bid_it.user " +
+                    "        where message.receiver_id = user.id " +
+                    "        ) as message, just_bid_it.user " +
+                    "where  message.sender_id = user.id " +
+                    "and message.id = ?", params, new MessageRowMapper());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to delete message");
+            e.printStackTrace();
+            throw new DataAccessException("could not delete message"){};
+        }
+    }
+
+    public void deleteMessage(int messageId){
+        try{
+            jdbcTemplate.update("delete from message where id = ? ", messageId);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to delete message");
+            e.printStackTrace();
+            throw new DataAccessException("could not delete message"){};
         }
     }
 }
