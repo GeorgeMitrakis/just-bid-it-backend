@@ -56,19 +56,19 @@ public class SignupResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "missing or empty parameters");
         }
         else if(!password.equals(password1)){
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "passwords don't match");
+            throw new ResourceException(461, "passwords don't match");
         }
         else if (userDAO.getUserByUsername(username).isPresent()){
-            throw new ResourceException(Status.CLIENT_ERROR_CONFLICT,"username is already taken");
+            throw new ResourceException(462,"username is already taken");
         }
         else if (userDAO.getUserByEmail(email).isPresent()){
-            throw new ResourceException(Status.CLIENT_ERROR_CONFLICT,"email is already taken");
+            throw new ResourceException(463,"email is already taken");
         }
         else if (userDAO.getUserByPhoneNumber(phoneNumber).isPresent()){
-            throw new ResourceException(Status.CLIENT_ERROR_CONFLICT,"phone number is already in use");
+            throw new ResourceException(464,"phone number is already in use");
         }
         else if (userDAO.getUserByTRN(taxRegistrationNumber).isPresent()){
-            throw new ResourceException(Status.CLIENT_ERROR_CONFLICT,"tax registration number is already in use");
+            throw new ResourceException(465,"tax registration number is already in use");
         }
 
         // hash password

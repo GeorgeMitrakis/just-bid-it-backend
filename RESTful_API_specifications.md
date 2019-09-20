@@ -29,6 +29,14 @@
 | ------ | ----- | ------ | ------ |
 | POST   | username, password, password1, firstname, lastname,email, phone_number, country, location, tax_registration_number | result:{id, role, access, username, firstname, lastname,email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating}  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
 
+#### Signup Custom Status Codes
+| code | meaning |
+| ------ | ----- |
+| 461 | passwords don't match |
+| 462 | username taken |
+| 463 | email is already in use |
+| 464 | phone number is already in use |
+| 465 | tax number is already in use |
 
 #### /admin/users
 | Method | Input | Output | Action |
