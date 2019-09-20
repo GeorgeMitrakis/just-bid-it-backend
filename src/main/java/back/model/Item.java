@@ -17,7 +17,7 @@ public class Item {
 
     private List<String> categories;
 
-    private Bids bids;
+    private List<Bid> bids;
 
     private float currentBid;
 
@@ -55,7 +55,7 @@ public class Item {
         this.running = running;
         this.name = name;
         this.categories = categories;
-        this.bids = new Bids(bids);
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -77,7 +77,7 @@ public class Item {
         this.running = running;
         this.name = name;
         this.categories = categories;
-        this.bids = new Bids(bids);
+        this.bids = bids;
         this.currentBid = currentBid;
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
@@ -175,12 +175,7 @@ public class Item {
     }
 
     public void setBids(List<Bid> bids) {
-        if(this.bids == null){
-            this.bids = new Bids(bids);
-        }
-        else{
-            this.bids.setBids(bids);
-        }
+        this.bids = bids;
     }
 
     public void setCurrentBid(float currentBid) {
@@ -257,13 +252,9 @@ public class Item {
         return categories;
     }
 
-    @XmlTransient
+    @XmlElementWrapper(name="Bids")
+    @XmlElement(name="Bid")
     public List<Bid> getBids() {
-        return bids.getBids();
-    }
-
-    @XmlElement(name="Bids")
-    public Bids getBidsObject(){
         return bids;
     }
 
