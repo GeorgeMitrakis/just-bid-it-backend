@@ -13,7 +13,7 @@ public interface ItemDAO {
 
     Optional<Item> getItemById(long id);
 
-    void storeItem(Item item);
+    void storeItem(Item item, long userId);
 
     //void storeItemCategories(long itemId);
 

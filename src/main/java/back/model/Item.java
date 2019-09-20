@@ -7,8 +7,6 @@ import javax.xml.bind.annotation.*;
 public class Item {
     private long id;
 
-    private long sellerId;
-
     private Seller seller;
 
     private boolean running;
@@ -48,9 +46,8 @@ public class Item {
 
 
 
-    public Item(long id, long sellerId, Seller seller, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id, Seller seller, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
-        this.sellerId = sellerId;
         this.seller = seller;
         this.running = running;
         this.name = name;
@@ -70,9 +67,8 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
-        this.sellerId = sellerId;
         this.seller = null;
         this.running = running;
         this.name = name;
@@ -92,9 +88,8 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, Seller seller, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id, Seller seller, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
-        this.sellerId = sellerId;
         this.seller = seller;
         this.running = running;
         this.name = name;
@@ -114,9 +109,8 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
         this.id = id;
-        this.sellerId = sellerId;
         this.seller = null;
         this.running = running;
         this.name = name;
@@ -136,9 +130,8 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, long sellerId, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
         this.id = id;
-        this.sellerId = sellerId;
         this.seller = null;
         this.running = running;
         this.name = name;
@@ -226,10 +219,6 @@ public class Item {
     @XmlAttribute(name="ItemID")
     public long getId() {
         return id;
-    }
-
-    public long getSellerId() {
-        return sellerId;
     }
 
     @XmlElement(name="Seller")

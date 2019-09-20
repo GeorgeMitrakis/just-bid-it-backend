@@ -339,13 +339,13 @@ public class DataAccess {
         return Optional.of(items.get(0));
     }
 
-    public void storeItem(Item item){
+    public void storeItem(Item item, long userId){
         try{//try storing the item itself
             KeyHolder keyHolder = new GeneratedKeyHolder();
             if((item.getLatitude() == null) || (item.getLongitude()==null)){
                 jdbcTemplate.update(connection -> {
                     PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, item.getSellerId());
+                    ps.setLong(1, userId);
                     ps.setString(2, item.getName());
                     ps.setFloat(3, item.getCurrentBid());
                     ps.setFloat(4, item.getFirstBid());
@@ -362,7 +362,7 @@ public class DataAccess {
             else{
                 jdbcTemplate.update(connection -> {
                     PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, item.getSellerId());
+                    ps.setLong(1, userId);
                     ps.setString(2, item.getName());
                     ps.setFloat(3, item.getCurrentBid());
                     ps.setFloat(4, item.getFirstBid());
