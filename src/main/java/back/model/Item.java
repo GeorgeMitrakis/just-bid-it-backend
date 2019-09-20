@@ -286,11 +286,13 @@ public class Item {
     public Location getLocationObject(){
         return location;
     }
+
+    @XmlTransient
     public Double getLatitude() {
         return location.getLatitude();
     }
 
-
+    @XmlTransient
     public Double getLongitude() {
         return location.getLongitude();
     }
