@@ -296,7 +296,7 @@ public class DataAccess {
 
         Long[] bidParams = new Long[1];
         bidParams[0] = (long) userId;
-        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating, common_user.location, common_user.country " +
                 "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
                 "where bid.item_id = item.id " +
                 "and bid.bidder_id = common_user.id " +
@@ -312,7 +312,7 @@ public class DataAccess {
         List<Item> items =  jdbcTemplate.query("select item.*, user.username, common_user.seller_rating from just_bid_it.item, just_bid_it.user, just_bid_it.common_user " +
                 "where user.id = common_user.id and user.id = item.seller_id", new ItemRowMapper(null));
         List<Map<String,String>> itemCategories = jdbcTemplate.query("select * from item_categories", new ICRowMapper());
-        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+        List<Bid> itemBids = jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating, common_user.location, common_user.country " +
                 "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user, just_bid_it.item as item " +
                 "where bid.item_id = item.id and bid.bidder_id = common_user.id and user.id = common_user.id ", new BidRowMapper());
 
@@ -686,7 +686,7 @@ public class DataAccess {
     public List<Bid> getFullBidsInfoByItemId(long itemId) throws DataAccessException{
         try{
             Long[] params = new Long[]{itemId};
-            return jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating " +
+            return jdbcTemplate.query("select bid.*, user.username, common_user.bidder_rating, common_user.location, common_user.country " +
                     "from just_bid_it.bid as bid, just_bid_it.user as user, just_bid_it.common_user as common_user " +
                     "where bid.item_id = ? " +
                     "and bid.bidder_id = common_user.id " +
@@ -699,14 +699,14 @@ public class DataAccess {
         }
     }
 
-    public void storeBid(Bid bid) throws DataAccessException{
+    public void storeBid(Bid bid, long bidderId) throws DataAccessException{
         try{
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(
                         "insert into just_bid_it.bid(id, item_id, bidder_id, time, amount) VALUES (default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setLong(1, bid.getItemId());
-                ps.setLong(2, bid.getBidderId());
+                ps.setLong(2, bidderId);
                 ps.setString(3,bid.getTime());
                 ps.setFloat(4, bid.getAmount());
                 return ps;
@@ -715,23 +715,14 @@ public class DataAccess {
             long id =  keyHolder.getKey().longValue();
             bid.setId(id);
 
-            String bidder  = jdbcTemplate.query("select user.username " +
-                    "from just_bid_it.user , just_bid_it.bid " +
-                    "where user.id = bid.bidder_id " +
-                    "and bid.bidder_id = "+bid.getBidderId(),
-                    (rs, rowNum)-> rs.getString("username")
-                    ).get(0);
+            Long[] params = new Long[]{bidderId};
+            Bidder bidder  = jdbcTemplate.queryForObject("select user.username, common_user.* " +
+                    "from just_bid_it.user , just_bid_it.common_user " +
+                    "where user.id = common_user.id " +
+                    "and common_user.id = ?",params, new BidderRowMapper());
 
             bid.setBidder(bidder);
 
-            Integer bidderRating  = jdbcTemplate.query("select common_user.bidder_rating " +
-                            "from just_bid_it.common_user , just_bid_it.bid " +
-                            "where common_user.id = bid.bidder_id " +
-                            "and bid.bidder_id = "+bid.getBidderId(),
-                    (rs, rowNum)-> rs.getInt("bidder_rating")
-            ).get(0);
-
-            bid.setBidderRating(bidderRating);
 
 
         }

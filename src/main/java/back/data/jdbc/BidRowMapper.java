@@ -12,9 +12,10 @@ public class BidRowMapper implements RowMapper<Bid> {
         return new Bid(
                 rs.getInt("id"),
                 rs.getInt("item_id"),
-                rs.getInt("bidder_id"),
                 rs.getString("username"),
                 rs.getInt("bidder_rating"),
+                rs.getString("location"),
+                rs.getString("country"),
                 rs.getString("time"),
                 rs.getFloat("amount")
         );

@@ -2,17 +2,12 @@ package back.model;
 
 import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name="Bid")
 public class Bid {
     private long id;
 
     private long itemId;
 
-    private long bidderId;
-
-    private String bidder;
-
-    private int bidderRating;
+    private Bidder bidder;
 
     private String time;
 
@@ -21,20 +16,26 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(long id, long itemId, long bidderId, String time, float amount) {
+    public Bid(long id, long itemId, String time, float amount) {
         this.id = id;
         this.itemId = itemId;
-        this.bidderId = bidderId;
+        this.bidder = null;
         this.time = time;
         this.amount = amount;
     }
 
-    public Bid(long id, long itemId, long bidderId, String bidder, int bidderRating, String time, float amount) {
+    public Bid(long id, long itemId, Bidder bidder, String time, float amount) {
         this.id = id;
         this.itemId = itemId;
-        this.bidderId = bidderId;
         this.bidder = bidder;
-        this.bidderRating = bidderRating;
+        this.time = time;
+        this.amount = amount;
+    }
+
+    public Bid(long id, long itemId, String bidderUsername, int bidderRating, String bidderLocation, String bidderCountry, String time, float amount) {
+        this.id = id;
+        this.itemId = itemId;
+        this.bidder = new Bidder(bidderUsername, bidderRating, bidderLocation, bidderCountry);
         this.time = time;
         this.amount = amount;
     }
@@ -43,20 +44,12 @@ public class Bid {
         this.id = id;
     }
 
-    public void setBidder(String bidder) {
-        this.bidder = bidder;
-    }
-
-    public void setBidderRating(int bidderRating) {
-        this.bidderRating = bidderRating;
-    }
-
     public void setItemId(long itemId) {
         this.itemId = itemId;
     }
 
-    public void setBidderId(long bidderId) {
-        this.bidderId = bidderId;
+    public void setBidder(Bidder bidder) {
+        this.bidder = bidder;
     }
 
     public void setTime(String time) {
@@ -72,12 +65,9 @@ public class Bid {
         return id;
     }
 
+    @XmlTransient
     public long getItemId() {
         return itemId;
-    }
-
-    public long getBidderId() {
-        return bidderId;
     }
 
     @XmlElement(name="Time")
@@ -90,11 +80,8 @@ public class Bid {
         return amount;
     }
 
-    public String getBidder() {
+    @XmlElement(name="Bidder")
+    public Bidder getBidder() {
         return bidder;
-    }
-
-    public int getBidderRating() {
-        return bidderRating;
     }
 }
