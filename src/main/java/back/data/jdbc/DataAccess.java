@@ -559,7 +559,7 @@ public class DataAccess {
             }
         }
         if(location!=null){
-            query = query + " location = ? ";
+            query = query + " item.location = ? ";
             if(price!=null){
                 query = query + " and ";
             }
@@ -587,6 +587,9 @@ public class DataAccess {
         }
         if(price!=null){
             params = appendValue(params, price);
+        }
+        for (Object o:params) {
+            System.out.println(o.toString());
         }
         return params;
     }

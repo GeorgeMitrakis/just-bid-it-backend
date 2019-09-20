@@ -4,60 +4,43 @@ import java.util.List;
 import javax.xml.bind.annotation.*;
 
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Item {
-    @XmlAttribute(name="ItemID")
     private long id;
 
-    @XmlElement(name="SellerID")
     private long sellerId;
 
-    @XmlElement(name="Seller")
     private Seller seller;
 
-    @XmlTransient
     private boolean running;
 
-    @XmlElement(name="Name")
     private String name;
 
-    @XmlElement(name="Category")
     private List<String> categories;
 
-    @XmlElement(name="Bid")
     private List<Bid> bids;
 
-    @XmlElement(name="Current_Bid")
     private float currentBid;
 
-    @XmlElement(name="First_Bid")
     private float firstBid;
 
-    @XmlElement(name="Buy_Price")
     private float buyPrice;
 
-    @XmlElement(name="Number_of_Bids")
     private int numberOfBids;
 
-    @XmlElement(name="Location")
-    private String location;
+//    private String location;
+//
+//    private Double latitude;
+//
+//    private Double longitude;
 
-    @XmlElement(name="Latitude")
-    private Double latitude;
+    private Location location;
 
-    @XmlElement(name="Longitude")
-    private Double longitude;
-
-    @XmlElement(name="Country")
     private String country;
 
-    @XmlElement(name="Started")
     private String start;
 
-    @XmlElement(name="Ends")
     private String end;
 
-    @XmlElement(name="Description")
     private String description;
 
     public Item() {
@@ -77,9 +60,10 @@ public class Item {
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
+//        this.location = location;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+        this.location = new Location(location,latitude,longitude);
         this.country = country;
         this.start = start;
         this.end = end;
@@ -98,9 +82,10 @@ public class Item {
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
-        this.location = location;
-        this.latitude = null;
-        this.longitude = null;
+//        this.location = location;
+//        this.latitude = null;
+//        this.longitude = null;
+        this.location = new Location(location);
         this.country = country;
         this.start = start;
         this.end = end;
@@ -119,9 +104,10 @@ public class Item {
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
+//        this.location = location;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+        this.location = new Location(location,latitude,longitude);
         this.country = country;
         this.start = start;
         this.end = end;
@@ -140,9 +126,10 @@ public class Item {
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
+//        this.location = location;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+        this.location = new Location(location,latitude,longitude);
         this.country = country;
         this.start = start;
         this.end = end;
@@ -161,9 +148,10 @@ public class Item {
         this.firstBid = firstBid;
         this.buyPrice = buyPrice;
         this.numberOfBids = numberOfBids;
-        this.location = location;
-        this.latitude = null;
-        this.longitude = null;
+//        this.location = location;
+//        this.latitude = null;
+//        this.longitude = null;
+        this.location = new Location(location);
         this.country = country;
         this.start = start;
         this.end = end;
@@ -211,15 +199,16 @@ public class Item {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.location.setName(location);
     }
 
     public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+//        this.latitude = latitude;
+        this.location.setLatitude(latitude);
     }
 
     public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+        this.location.setLongitude(longitude);
     }
 
     public void setCountry(String country) {
@@ -234,6 +223,7 @@ public class Item {
         this.description = description;
     }
 
+    @XmlAttribute(name="ItemID")
     public long getId() {
         return id;
     }
@@ -242,66 +232,85 @@ public class Item {
         return sellerId;
     }
 
+    @XmlElement(name="Seller")
     public Seller getSeller() {
         return seller;
     }
 
+    @XmlTransient
     public boolean isRunning() {
         return running;
     }
 
+    @XmlElement(name="Name")
     public String getName() {
         return name;
     }
 
+    @XmlElement(name="Category")
     public List<String> getCategories() {
         return categories;
     }
 
+    @XmlElement(name="Bid")
     public List<Bid> getBids() {
         return bids;
     }
 
+    @XmlElement(name="Current_Bid")
     public float getCurrentBid() {
         return currentBid;
     }
 
+    @XmlElement(name="First_Bid")
     public float getFirstBid() {
         return firstBid;
     }
 
+    @XmlElement(name="Buy_Price")
     public float getBuyPrice() {
         return buyPrice;
     }
 
+    @XmlElement(name="Number_of_Bids")
     public int getNumberOfBids() {
         return numberOfBids;
     }
 
+    @XmlTransient
     public String getLocation() {
+        return location.getName();
+    }
+
+    @XmlElement(name="Location")
+    public Location getLocationObject(){
         return location;
     }
-
     public Double getLatitude() {
-        return latitude;
+        return location.getLatitude();
     }
+
 
     public Double getLongitude() {
-        return longitude;
+        return location.getLongitude();
     }
 
+    @XmlElement(name="Country")
     public String getCountry() {
         return country;
     }
 
+    @XmlElement(name="Started")
     public String getStart() {
         return start;
     }
 
+    @XmlElement(name="Ends")
     public String getEnd() {
         return end;
     }
 
+    @XmlElement(name="Description")
     public String getDescription() {
         return description;
     }

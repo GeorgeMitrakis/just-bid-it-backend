@@ -1,31 +1,20 @@
 package back.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Bid {
-    @XmlTransient
     private long id;
 
-    @XmlTransient
     private final long itemId;
 
-    @XmlTransient
     private final long bidderId;
 
-    @XmlTransient
     private String bidder;
 
-    @XmlTransient
     private int bidderRating;
 
-    @XmlAttribute(name="Time")
     private final String time;
 
-    @XmlAttribute(name="Amount")
     private final float amount;
 
     public Bid(long id, long itemId, long bidderId, String time, float amount) {
@@ -58,6 +47,7 @@ public class Bid {
         this.bidderRating = bidderRating;
     }
 
+    @XmlTransient
     public long getId() {
         return id;
     }
@@ -70,10 +60,12 @@ public class Bid {
         return bidderId;
     }
 
+    @XmlElement(name="Time")
     public String getTime() {
         return time;
     }
 
+    @XmlElement(name="Amount")
     public float getAmount() {
         return amount;
     }
