@@ -21,7 +21,7 @@ create table bid
     constraint bid_casual_user_id_fk
         foreign key (bidder_id) references common_user (id),
     constraint bid_item_id_fk
-        foreign key (item_id) references item (id)
+        foreign key (item_id) references item (id_i)
 );
 
 INSERT INTO just_bid_it.bid (id, item_id, bidder_id, time, amount) VALUES (1, 5, 9, '2019-08-30 02:05:24', 17.3);
@@ -176,7 +176,7 @@ create table item_categories
     constraint item_categories_category_name_fk
         foreign key (category) references category (name),
     constraint item_categories_item_id_fk
-        foreign key (item_id) references item (id)
+        foreign key (item_id) references item (id_i)
 );
 
 INSERT INTO just_bid_it.item_categories (item_id, category) VALUES (1, 'Apple');

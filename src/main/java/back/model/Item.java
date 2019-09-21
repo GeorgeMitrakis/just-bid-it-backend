@@ -247,7 +247,7 @@ public class Item {
         return bids;
     }
 
-    @XmlElement(name="Current_Bid")
+    @XmlElement(name="Currently")
     public float getCurrentBid() {
         return currentBid;
     }
