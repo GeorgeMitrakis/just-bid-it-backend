@@ -1,5 +1,7 @@
 package back.model;
 
+import back.util.DateTimeParser;
+
 import java.util.List;
 import javax.xml.bind.annotation.*;
 
@@ -62,8 +64,8 @@ public class Item {
 //        this.longitude = longitude;
         this.location = new Location(location,latitude,longitude);
         this.country = country;
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parseDateTime(start);
+        this.end = DateTimeParser.parseDateTime(end);
         this.description = description;
     }
 
@@ -83,8 +85,8 @@ public class Item {
 //        this.longitude = null;
         this.location = new Location(location);
         this.country = country;
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parseDateTime(start);
+        this.end = DateTimeParser.parseDateTime(end);
         this.description = description;
     }
 
@@ -104,8 +106,8 @@ public class Item {
 //        this.longitude = longitude;
         this.location = new Location(location,latitude,longitude);
         this.country = country;
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parseDateTime(start);
+        this.end = DateTimeParser.parseDateTime(end);
         this.description = description;
     }
 
@@ -125,8 +127,8 @@ public class Item {
 //        this.longitude = longitude;
         this.location = new Location(location,latitude,longitude);
         this.country = country;
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parseDateTime(start);
+        this.end = DateTimeParser.parseDateTime(end);
         this.description = description;
     }
 
@@ -146,8 +148,8 @@ public class Item {
 //        this.longitude = null;
         this.location = new Location(location);
         this.country = country;
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parseDateTime(start);
+        this.end = DateTimeParser.parseDateTime(end);
         this.description = description;
     }
 

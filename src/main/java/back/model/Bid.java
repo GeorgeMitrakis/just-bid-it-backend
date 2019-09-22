@@ -1,5 +1,7 @@
 package back.model;
 
+import back.util.DateTimeParser;
+
 import javax.xml.bind.annotation.*;
 
 public class Bid {
@@ -20,7 +22,7 @@ public class Bid {
         this.id = id;
         this.itemId = itemId;
         this.bidder = null;
-        this.time = time;
+        this.time = DateTimeParser.parseDateTime(time);
         this.amount = amount;
     }
 
@@ -28,7 +30,7 @@ public class Bid {
         this.id = id;
         this.itemId = itemId;
         this.bidder = bidder;
-        this.time = time;
+        this.time = DateTimeParser.parseDateTime(time);
         this.amount = amount;
     }
 
@@ -36,7 +38,7 @@ public class Bid {
         this.id = id;
         this.itemId = itemId;
         this.bidder = new Bidder(bidderUsername, bidderRating, bidderLocation, bidderCountry);
-        this.time = time;
+        this.time = DateTimeParser.parseDateTime(time);
         this.amount = amount;
     }
 
