@@ -5,6 +5,7 @@ import back.data.UserDAO;
 import back.model.CommonUser;
 import back.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public void storeUser(CommonUser commonUser, String password){
+    public void storeUser(CommonUser commonUser, String password) {
         dataAccess.storeUser(commonUser, password);
     }
 

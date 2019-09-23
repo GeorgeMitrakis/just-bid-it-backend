@@ -148,7 +148,7 @@ public class DataAccess {
         }
     }
 
-    void storeUser(CommonUser commonUser, String hashedPassword) throws DataAccessException{
+    void storeUser(CommonUser commonUser, String hashedPassword) throws DataAccessException {
         try {
             // insert into user and keep id
             KeyHolder keyHolder = new GeneratedKeyHolder();

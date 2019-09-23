@@ -112,7 +112,7 @@ create table item
     country        varchar(32)   not null,
     start          datetime      not null,
     end            datetime      not null,
-    description    varchar(512)  not null,
+    description    varchar(2048)  not null,
     constraint item_common_user_id_fk
         foreign key (seller_id) references common_user (id)
 );
