@@ -8,6 +8,8 @@ public class Seller{
     private long id;
     private int rating;
 
+    public Seller(){}
+
     public Seller(CommonUser user){
 //        super(user);
         this.id = user.getId();

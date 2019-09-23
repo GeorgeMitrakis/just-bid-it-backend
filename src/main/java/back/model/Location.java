@@ -14,6 +14,8 @@ public class Location {
 //    private List<Item> itemsInThisLocation;
 //    private List<Item> usersInThisLocation;
 
+    public Location(){}
+
     public Location(String name) {
         this.name = name;
     }

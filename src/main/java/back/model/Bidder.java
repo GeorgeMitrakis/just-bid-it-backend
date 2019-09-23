@@ -9,6 +9,8 @@ public class Bidder {
     private String location;
     private String country;
 
+    public Bidder(){}
+
     public Bidder(String username, int rating, String location, String country) {
         this.username = username;
         this.rating = rating;

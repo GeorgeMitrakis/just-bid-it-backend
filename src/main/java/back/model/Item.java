@@ -23,7 +23,7 @@ public class Item {
 
     private float firstBid;
 
-    private float buyPrice;
+    private Float buyPrice;
 
     private int numberOfBids;
 
@@ -48,7 +48,23 @@ public class Item {
 
 
 
-    public Item(long id, Seller seller, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id,
+			Seller seller,
+			boolean running,
+			String name,
+			List<String> categories,
+			List<Bid> bids,
+			float currentBid,
+			float firstBid,
+            Float buyPrice,
+			int numberOfBids,
+			String location,
+			Double latitude,
+			Double longitude,
+			String country,
+			String start,
+			String end,
+			String description) {
         this.id = id;
         this.seller = seller;
         this.running = running;
@@ -69,7 +85,21 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, boolean running, String name, List<String> categories, List<Bid> bids, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(
+            long id,
+			boolean running,
+			String name,
+			List<String> categories,
+			List<Bid> bids,
+			float currentBid,
+			float firstBid,
+            Float buyPrice,
+			int numberOfBids,
+			String location,
+			String country,
+			String start,
+			String end,
+			String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -90,7 +120,22 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, Seller seller, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id,
+			Seller seller,
+			boolean running,
+			String name,
+			List<String> categories,
+			float currentBid,
+			float firstBid,
+            Float buyPrice,
+			int numberOfBids,
+			String location,
+			Double latitude,
+			Double longitude,
+			String country,
+			String start,
+			String end,
+			String description) {
         this.id = id;
         this.seller = seller;
         this.running = running;
@@ -111,7 +156,21 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, Double latitude, Double longitude, String country, String start, String end, String description) {
+    public Item(long id,
+			boolean running,
+			String name,
+			List<String> categories,
+			float currentBid,
+			float firstBid,
+            Float buyPrice,
+			int numberOfBids,
+			String location,
+			Double latitude,
+			Double longitude,
+			String country,
+			String start,
+			String end,
+			String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -132,7 +191,19 @@ public class Item {
         this.description = description;
     }
 
-    public Item(long id, boolean running, String name, List<String> categories, float currentBid, float firstBid, float buyPrice, int numberOfBids, String location, String country, String start, String end, String description) {
+    public Item(long id,
+			boolean running,
+			String name,
+			List<String> categories,
+			float currentBid,
+			float firstBid,
+            Float buyPrice,
+			int numberOfBids,
+			String location,
+			String country,
+			String start,
+			String end,
+			String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -189,7 +260,7 @@ public class Item {
         this.firstBid = firstBid;
     }
 
-    public void setBuyPrice(float buyPrice) {
+    public void setBuyPrice(Float buyPrice) {
         this.buyPrice = buyPrice;
     }
 
@@ -210,8 +281,12 @@ public class Item {
         this.country = country;
     }
 
+    public void setStart(String start) {
+        this.start = DateTimeParser.parseDateTime(start);
+    }
+
     public void setEnd(String end) {
-        this.end = end;
+        this.end = DateTimeParser.parseDateTime(end);
     }
 
     public void setDescription(String description) {
@@ -260,7 +335,7 @@ public class Item {
     }
 
     @XmlElement(name="Buy_Price")
-    public float getBuyPrice() {
+    public Float getBuyPrice() {
         return buyPrice;
     }
 

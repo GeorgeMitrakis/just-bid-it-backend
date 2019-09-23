@@ -6,6 +6,9 @@ import java.util.List;
 public class Bids {
     private List<Bid> bids;
 
+
+    public Bids(){}
+
     public Bids(List<Bid> bids) {
         this.bids = bids;
     }

@@ -102,6 +102,9 @@ public class RestfulApp extends Application {
 		//DELETE
 		router.attach("/messages/{id}/delete", MessageDeleteResource.class);
 
+		//GET
+		router.attach("/upload", UploadResource.class);
+
 		return router;
 	}
 
