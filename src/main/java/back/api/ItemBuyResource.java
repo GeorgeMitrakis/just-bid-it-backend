@@ -61,10 +61,13 @@ public class ItemBuyResource extends ServerResource {
 
         //create new bid object
         Bid bid = new Bid(0, itemId, time, amount);
+        item.setEnd(time);
+        item.setCurrentBid(item.getBuyPrice());
 
         //insert bid to db
         try{
             bidDAO.storeBid(bid, bidderId);
+            itemDAO.updateItem(item);//change end date, since item will be bought now
         }
         catch(DataAccessException e){
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "buy-bid insertion in database failed");

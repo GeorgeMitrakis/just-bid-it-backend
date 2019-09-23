@@ -69,7 +69,7 @@ create table common_user
     first_name              varchar(64)   not null,
     last_name               varchar(64)   not null,
     email                   varchar(128)  not null,
-    phone_number            varchar(16)   not null,
+    phone_number            varchar(32)   not null,
     country                 varchar(32)   not null,
     location                varchar(64)   not null,
     tax_registration_number varchar(32)   not null,

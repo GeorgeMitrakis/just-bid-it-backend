@@ -600,6 +600,7 @@ public class DataAccess {
 
             //build the query
             String query = searchQueryBuild(searchTerm, category, location, price);
+            query = query + "order by end desc, name asc ";
             query = query + "limit ?, ? ";
 
             System.out.println(query);
@@ -826,7 +827,7 @@ public class DataAccess {
 
     public void deleteMessage(int messageId){
         try{
-            jdbcTemplate.update("delete from message where id = ? ", messageId);
+            jdbcTemplate.update("delete from just_bid_it.message where message.id = ? ", messageId);
         }
         catch(Exception e) {
             System.err.println("Failed to delete message");

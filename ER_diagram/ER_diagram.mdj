@@ -2292,7 +2292,7 @@
 									},
 									"name": "phone_number",
 									"type": "VARCHAR",
-									"length": "16",
+									"length": "32",
 									"unique": true
 								},
 								{
