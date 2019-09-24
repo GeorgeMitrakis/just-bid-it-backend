@@ -103,9 +103,10 @@ public class ItemsResource extends ServerResource {
             longitude = Double.parseDouble(form.getFirstValue("longitude"));
         }
 
-        Item item = new Item(0, userId, true, name, categories, firstBid, firstBid, buyPrice, 0, location, latitude, longitude, country, start,end, description);
+        Item item = new Item(0, true, name, categories, firstBid, firstBid, buyPrice, 0, location, latitude, longitude, country, start,end, description);
         try{
-            itemDAO.storeItem(item);
+
+            itemDAO.storeItem(item, userId);
         }
         catch (DataAccessException e){
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "item insertion in database failed");

@@ -21,7 +21,7 @@ create table bid
     constraint bid_casual_user_id_fk
         foreign key (bidder_id) references common_user (id),
     constraint bid_item_id_fk
-        foreign key (item_id) references item (id)
+        foreign key (item_id) references item (id_i)
 );
 
 INSERT INTO just_bid_it.bid (id, item_id, bidder_id, time, amount) VALUES (1, 5, 9, '2019-08-30 02:05:24', 17.3);
@@ -69,7 +69,7 @@ create table common_user
     first_name              varchar(64)   not null,
     last_name               varchar(64)   not null,
     email                   varchar(128)  not null,
-    phone_number            varchar(16)   not null,
+    phone_number            varchar(32)   not null,
     country                 varchar(32)   not null,
     location                varchar(64)   not null,
     tax_registration_number varchar(32)   not null,
@@ -112,7 +112,7 @@ create table item
     country        varchar(32)   not null,
     start          datetime      not null,
     end            datetime      not null,
-    description    varchar(512)  not null,
+    description    varchar(2048)  not null,
     constraint item_common_user_id_fk
         foreign key (seller_id) references common_user (id)
 );
@@ -176,7 +176,7 @@ create table item_categories
     constraint item_categories_category_name_fk
         foreign key (category) references category (name),
     constraint item_categories_item_id_fk
-        foreign key (item_id) references item (id)
+        foreign key (item_id) references item (id_i)
 );
 
 INSERT INTO just_bid_it.item_categories (item_id, category) VALUES (1, 'Apple');

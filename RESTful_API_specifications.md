@@ -29,6 +29,14 @@
 | ------ | ----- | ------ | ------ |
 | POST   | username, password, password1, firstname, lastname,email, phone_number, country, location, tax_registration_number | result:{id, role, access, username, firstname, lastname,email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating}  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
 
+#### Signup Custom Status Codes
+| code | meaning |
+| ------ | ----- |
+| 461 | passwords don't match |
+| 462 | username taken |
+| 463 | email is already in use |
+| 464 | phone number is already in use |
+| 465 | tax number is already in use |
 
 #### /admin/users
 | Method | Input | Output | Action |
@@ -66,15 +74,15 @@
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | userId | {total, start, count, results:[{id, userId, name, running, bids:[{id, amount, bidder, bidderId, bidderRating, itemId, time }], categories:[{category: "Shoes"},{ category:...}, ...], buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}]}  |  ο χρήστης παίρνει τα αντικείμενά του   |
-| POST   | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
+| POST   | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location:{name, latitude, longitude}, country, start, end, description}  |  ο χρήστης δημιουργεί μια νεα δημοπρασία αντικειμένου   |
 
 
 #### /items/{id}
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
 | GET    | {...} | {...}  |  ο χρήστης παίρνει το αντικείμενο #{id} μαζί με όλες τις προσφορές στη δημοπρασία του   |
-| PUT    | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης επεξεργάζεται τις πληροφορίες της δημοπρασίας #{id} |
-| DELETE | - | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location, country, start, end, description, latitude, longitude}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης διαγράφει τη δημοπρασία #{id}   |
+| PUT    | userId, name, categories:[{category: "Shoes"},{ category:...}, ...], buy_price, first_bid, location, country, end, description, [latitude, longitude] | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location:{name, latitude, longitude}, country, start, end, description}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης επεξεργάζεται τις πληροφορίες της δημοπρασίας #{id} |
+| DELETE | - | item:{id, selledId, name, categories:["Shoes", "Watches",...], running, buyPrice, firstBid, currentBid, numberOfBids, location:{name, latitude, longitude}, country, start, end, description}  |  ΠΡΕΠΕΙ ΤΟ ΑΝΤΙΚΕΙΜΕΝΟ ΝΑ ΑΝΗΚΕΙ ΣΤΟΝ ΧΡΗΣΤΗ! Ο χρήστης διαγράφει τη δημοπρασία #{id}   |
 
 
 #### /items/{id}/bid

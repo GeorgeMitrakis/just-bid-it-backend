@@ -11,5 +11,5 @@ public interface BidDAO {
 
     List<Bid> getFullBidsInfoByItemId(long itemId);
 
-    void storeBid(Bid bid);
+    void storeBid(Bid bid, long bidderId);
 }

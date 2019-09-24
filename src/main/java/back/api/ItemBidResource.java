@@ -62,11 +62,11 @@ public class ItemBidResource extends ServerResource {
         String time = myDateObj.format(myFormatObj);
 
         //create new bid object
-        Bid bid = new Bid(0, itemId, bidderId, time, amount);
+        Bid bid = new Bid(0, itemId, time, amount);
 
         //insert bid to db
         try{
-            bidDAO.storeBid(bid);
+            bidDAO.storeBid(bid, bidderId);
         }
         catch(DataAccessException e){
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "bid insertion in database failed");

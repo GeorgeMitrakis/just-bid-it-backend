@@ -3,7 +3,9 @@ package back.api;
 import back.conf.Configuration;
 import back.data.BidDAO;
 import back.data.ItemDAO;
+import back.data.UserDAO;
 import back.model.Bid;
+import back.model.CommonUser;
 import back.model.Item;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class ItemBuyResource extends ServerResource {
     private final ItemDAO itemDAO = Configuration.getInstance().getItemDAO();
     private final BidDAO bidDAO = Configuration.getInstance().getBidDAO();
+    private final UserDAO userDAO = Configuration.getInstance().getUserDAO();
 
     @Override
     protected Representation post(Representation entity) throws ResourceException {
@@ -57,11 +60,14 @@ public class ItemBuyResource extends ServerResource {
         String time = myDateObj.format(myFormatObj);
 
         //create new bid object
-        Bid bid = new Bid(0, itemId, bidderId, time, amount);
+        Bid bid = new Bid(0, itemId, time, amount);
+        item.setEnd(time);
+        item.setCurrentBid(item.getBuyPrice());
 
         //insert bid to db
         try{
-            bidDAO.storeBid(bid);
+            bidDAO.storeBid(bid, bidderId);
+            itemDAO.updateItem(item);//change end date, since item will be bought now
         }
         catch(DataAccessException e){
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "buy-bid insertion in database failed");

@@ -1,48 +1,44 @@
 package back.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import back.util.DateTimeParser;
 
-@XmlAccessorType(XmlAccessType.FIELD)
+import javax.xml.bind.annotation.*;
+
 public class Bid {
-    @XmlTransient
     private long id;
 
-    @XmlTransient
-    private final long itemId;
+    private long itemId;
 
-    @XmlTransient
-    private final long bidderId;
+    private Bidder bidder;
 
-    @XmlTransient
-    private String bidder;
+    private String time;
 
-    @XmlTransient
-    private int bidderRating;
+    private float amount;
 
-    @XmlAttribute(name="Time")
-    private final String time;
+    public Bid() {
+    }
 
-    @XmlAttribute(name="Amount")
-    private final float amount;
-
-    public Bid(long id, long itemId, long bidderId, String time, float amount) {
+    public Bid(long id, long itemId, String time, float amount) {
         this.id = id;
         this.itemId = itemId;
-        this.bidderId = bidderId;
-        this.time = time;
+        this.bidder = null;
+        this.time = DateTimeParser.parseDateTime(time);
         this.amount = amount;
     }
 
-    public Bid(long id, long itemId, long bidderId, String bidder, int bidderRating, String time, float amount) {
+    public Bid(long id, long itemId, Bidder bidder, String time, float amount) {
         this.id = id;
         this.itemId = itemId;
-        this.bidderId = bidderId;
         this.bidder = bidder;
-        this.bidderRating = bidderRating;
-        this.time = time;
+        this.time = DateTimeParser.parseDateTime(time);
+        this.amount = amount;
+    }
+
+    public Bid(long id, long itemId, String bidderUsername, int bidderRating, String bidderLocation, String bidderCountry, String time, float amount) {
+        this.id = id;
+        this.itemId = itemId;
+        this.bidder = new Bidder(bidderUsername, bidderRating, bidderLocation, bidderCountry);
+        this.time = DateTimeParser.parseDateTime(time);
         this.amount = amount;
     }
 
@@ -50,31 +46,44 @@ public class Bid {
         this.id = id;
     }
 
-    public void setBidder(String bidder) {
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setBidder(Bidder bidder) {
         this.bidder = bidder;
     }
 
-    public void setBidderRating(int bidderRating) {
-        this.bidderRating = bidderRating;
+    public void setTime(String time) {
+        this.time = time;
     }
 
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    @XmlTransient
     public long getId() {
         return id;
     }
 
+    @XmlTransient
     public long getItemId() {
         return itemId;
     }
 
-    public long getBidderId() {
-        return bidderId;
-    }
-
+    @XmlElement(name="Time")
     public String getTime() {
         return time;
     }
 
+    @XmlElement(name="Amount")
     public float getAmount() {
         return amount;
+    }
+
+    @XmlElement(name="Bidder")
+    public Bidder getBidder() {
+        return bidder;
     }
 }

@@ -35,8 +35,8 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void storeItem(Item item){
-        dataAccess.storeItem(item);
+    public void storeItem(Item item, long userId){
+        dataAccess.storeItem(item, userId);
     }
 
 //    @Override
