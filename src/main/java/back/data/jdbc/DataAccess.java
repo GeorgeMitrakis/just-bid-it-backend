@@ -763,6 +763,7 @@ public class DataAccess {
     public List<Message> getReceivedMessages(long userId){
         try{
             Long[] params = new Long[]{userId};
+            jdbcTemplate.update("update just_bid_it.message set message.read = true where message.receiver_id = ?", userId);
             return jdbcTemplate.query("select message.*, user.username as sender_username " +
                             "from( " +
                             "        select message.*, user.username as receiver_username " +
@@ -773,7 +774,7 @@ public class DataAccess {
                             "        ) as message, just_bid_it.user, just_bid_it.common_user " +
                             "where  message.sender_id = common_user.id " +
                             "  and common_user.id = user.id " +
-                            " order by time desc ",
+                            " order by message.read desc, message.time desc",
                     params, new MessageRowMapper());
         }
         catch(Exception e) {
@@ -792,7 +793,7 @@ public class DataAccess {
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text, time) VALUES (default,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text, time) VALUES (default,?,?,?,?,default) ", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, senderId);
                 ps.setInt(2, receiverId);
                 ps.setString(3, message.getText());
@@ -837,5 +838,20 @@ public class DataAccess {
             e.printStackTrace();
             throw new DataAccessException("could not delete message"){};
         }
+    }
+
+    public int getUnreadMessagesAmount(long id) {
+        try{
+            return jdbcTemplate.queryForObject("select count(*) " +
+                    "from just_bid_it.message " +
+                    "where message.read = false " +
+                    "and message.receiver_id = ?", Integer.class, id);
+        }
+        catch(Exception e) {
+            System.err.println("Failed to count messages");
+            e.printStackTrace();
+            throw new DataAccessException("could not count messages"){};
+        }
+
     }
 }

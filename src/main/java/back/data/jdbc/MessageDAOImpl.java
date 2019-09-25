@@ -38,4 +38,9 @@ public class MessageDAOImpl implements MessageDAO {
     public void deleteMessage(int messageId){
         dataAccess.deleteMessage(messageId);
     }
+
+    @Override
+    public int getUnreadMessagesAmount(long id) {
+        return dataAccess.getUnreadMessagesAmount(id);
+    }
 }

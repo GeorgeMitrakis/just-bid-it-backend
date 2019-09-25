@@ -14,4 +14,6 @@ public interface MessageDAO {
     Message getMessage(int messageId);
 
     void deleteMessage(int messageId);
+
+    int getUnreadMessagesAmount(long id);
 }
