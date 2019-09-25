@@ -39,7 +39,6 @@ public class ItemResource extends ServerResource {
                 ||newCategories.isEmpty()
                 ||form.getFirstValue("location") == null || form.getFirstValue("location").equals("")
                 ||form.getFirstValue("country") == null || form.getFirstValue("country").equals("")
-                ||form.getFirstValue("buy_price") == null
                 ||form.getFirstValue("first_bid") == null
                 ||form.getFirstValue("end") == null || form.getFirstValue("end").equals("")
                 ||form.getFirstValue("description") == null || form.getFirstValue("description").equals("")
@@ -51,7 +50,11 @@ public class ItemResource extends ServerResource {
         //extract the values
         long userId = Long.parseLong(form.getFirstValue("userId"));
         String name = form.getFirstValue("name");
-        float buyPrice = Float.parseFloat(form.getFirstValue("buy_price"));
+        Float buyPrice;
+        if(!(form.getFirstValue("buy_price") == null || form.getFirstValue("buy_price").isEmpty()))
+            buyPrice = Float.parseFloat(form.getFirstValue("buy_price"));
+        else
+            buyPrice = null;
         float firstBid = Float.parseFloat(form.getFirstValue("first_bid"));
         String location = form.getFirstValue("location");
         Double latitude = null;

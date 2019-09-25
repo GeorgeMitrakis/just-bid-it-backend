@@ -342,42 +342,44 @@ public class DataAccess {
     public void storeItem(Item item, long userId){
         try{//try storing the item itself
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            if((item.getLatitude() == null) || (item.getLongitude()==null)){
+
                 jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, userId);
-                    ps.setString(2, item.getName());
-                    ps.setFloat(3, item.getCurrentBid());
-                    ps.setFloat(4, item.getFirstBid());
-                    ps.setFloat(5, item.getBuyPrice());
-                    ps.setInt(6, item.getNumberOfBids());
-                    ps.setString(7, item.getLocation());
-                    ps.setString(8, item.getCountry());
-                    ps.setString(9, item.getStart());
-                    ps.setString(10, item.getEnd());
-                    ps.setString(11, item.getDescription());
+                    int i = 1;
+                    String query = "INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) " +
+                            "VALUES (default,?,?,?,?,";
+
+                    if(item.getBuyPrice()!=null)
+                        query = query + "?,";
+                    else
+                        query = query +"default," ;
+
+                    query = query +"?,?," ;
+
+                    if(item.getLatitude()!=null && item.getLongitude()!=null)
+                        query = query +"?,?," ;
+                    else
+                        query = query +"default,default," ;
+                    query = query +"?,?,?,?)";
+                    PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+                    ps.setLong(i++, userId);
+                    ps.setString(i++, item.getName());
+                    ps.setFloat(i++, item.getCurrentBid());
+                    ps.setFloat(i++, item.getFirstBid());
+                    if(item.getBuyPrice()!=null)
+                        ps.setFloat(i++, item.getBuyPrice());
+                    ps.setInt(i++, item.getNumberOfBids());
+                    ps.setString(i++, item.getLocation());
+                    if(item.getLatitude()!=null && item.getLongitude()!=null){
+                        ps.setDouble(i++, item.getLatitude());
+                        ps.setDouble(i++, item.getLongitude());
+                    }
+                    ps.setString(i++, item.getCountry());
+                    ps.setString(i++, item.getStart());
+                    ps.setString(i++, item.getEnd());
+                    ps.setString(i++, item.getDescription());
                     return ps;
                 },keyHolder);
-            }
-            else{
-                jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, userId);
-                    ps.setString(2, item.getName());
-                    ps.setFloat(3, item.getCurrentBid());
-                    ps.setFloat(4, item.getFirstBid());
-                    ps.setFloat(5, item.getBuyPrice());
-                    ps.setInt(6, item.getNumberOfBids());
-                    ps.setString(7, item.getLocation());
-                    ps.setDouble(8, item.getLatitude());
-                    ps.setDouble(9, item.getLongitude());
-                    ps.setString(10, item.getCountry());
-                    ps.setString(11, item.getStart());
-                    ps.setString(12, item.getEnd());
-                    ps.setString(13, item.getDescription());
-                    return ps;
-                },keyHolder);
-            }
 
 
             long id =  keyHolder.getKey().longValue();
