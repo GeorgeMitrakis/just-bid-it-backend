@@ -749,7 +749,8 @@ public class DataAccess {
                             "          and common_user.id = user.id " +
                             "        ) as message, just_bid_it.user, just_bid_it.common_user " +
                             "where  message.receiver_id = common_user.id " +
-                            "  and common_user.id = user.id ",
+                            "  and common_user.id = user.id " +
+                            " order by time desc ",
                     params, new MessageRowMapper());
         }
         catch(Exception e) {
@@ -771,7 +772,8 @@ public class DataAccess {
                             "          and common_user.id = user.id " +
                             "        ) as message, just_bid_it.user, just_bid_it.common_user " +
                             "where  message.sender_id = common_user.id " +
-                            "  and common_user.id = user.id ",
+                            "  and common_user.id = user.id " +
+                            " order by time desc ",
                     params, new MessageRowMapper());
         }
         catch(Exception e) {
@@ -790,10 +792,11 @@ public class DataAccess {
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text) VALUES (default,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text, time) VALUES (default,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, senderId);
                 ps.setInt(2, receiverId);
                 ps.setString(3, message.getText());
+                ps.setString(4, message.getTime());
                 return ps;
             },keyHolder);
 

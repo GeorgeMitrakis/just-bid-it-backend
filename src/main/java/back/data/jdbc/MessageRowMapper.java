@@ -14,7 +14,8 @@ public class MessageRowMapper implements RowMapper<Message> {
                 rs.getInt("id"),
                 rs.getString("sender_username"),
                 rs.getString("receiver_username"),
-                rs.getString("text")
+                rs.getString("text"),
+                rs.getString("time")
         );
     }
 }

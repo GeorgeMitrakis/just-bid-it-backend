@@ -12,6 +12,8 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.springframework.dao.DataAccessException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +42,11 @@ public class MessageSendResource extends ServerResource {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
         }
 
-        Message message = new Message(0, userOptional.get().getUsername(), receiver, text);
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String time = myDateObj.format(myFormatObj);
+
+        Message message = new Message(0, userOptional.get().getUsername(), receiver, text, time);
 
         try{
             messageDAO.storeMessage(message);
