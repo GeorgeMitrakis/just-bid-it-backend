@@ -21,13 +21,13 @@
 #### /login
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | username, password | result:{ value: { user information fields } }  |  ο χρήστης εισέρχεται στο σύστημα   |
+| POST   | username, password | { result:{ value: { user information fields } }, messagesReceived(int) }  |  ο χρήστης εισέρχεται στο σύστημα   |
 
 
 #### /signup
 | Method | Input | Output | Action |
 | ------ | ----- | ------ | ------ |
-| POST   | username, password, password1, firstname, lastname,email, phone_number, country, location, tax_registration_number | result:{id, role, access, username, firstname, lastname,email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating}  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
+| POST   | username, password, password1, firstname, lastname,email, phone_number, country, location, tax_registration_number | { result:{id, role, access, username, firstname, lastname,email, phoneNumber, country, location, taxRegistrationNumber, sellerRating, bidderRating}, messagesReceived(int) }  |  ο χρήστης κάνει αίτηση εγγραφής στο σύστημα   |
 
 #### Signup Custom Status Codes
 | code | meaning |

@@ -5,12 +5,14 @@ public class Message {
     private String sender; //username
     private String receiver; //username
     private String text;
+    private String time;
 
-    public Message(int id, String sender, String receiver, String text) {
+    public Message(int id, String sender, String receiver, String text, String time) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.text = text;
+        this.time = time;
     }
 
     public int getId() {
@@ -29,6 +31,10 @@ public class Message {
         return text;
     }
 
+    public String getTime() {
+        return time;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -43,5 +49,9 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

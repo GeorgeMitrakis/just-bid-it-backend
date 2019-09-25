@@ -85,6 +85,7 @@ public class SignupResource extends ServerResource {
         //return a json representation of the newly created record
         Map<String, Object> map = new HashMap<>();
         map.put("result", commonUser);
+        map.put("messagesReceived", 0);
         return new JsonMapRepresentation(map);
     }
 
