@@ -46,6 +46,9 @@ public class ItemBuyResource extends ServerResource {
         Item item = itemOptional.get();
 
         long bidderId = Long.parseLong(form.getFirstValue("bidder_id"));
+        if (item.getBuyPrice() == null) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "item cannot be bought");
+        }
         float amount = item.getBuyPrice();
 
 

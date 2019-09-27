@@ -77,7 +77,7 @@ public class ItemBidResource extends ServerResource {
             itemDAO.updateCurrentBid(itemId, bid.getAmount());
             item.setCurrentBid(amount);
             item.setNumberOfBids(item.getNumberOfBids()+1);
-            if(item.getBuyPrice() <= bid.getAmount()){
+            if((item.getBuyPrice()!=null)&&(item.getBuyPrice() <= bid.getAmount())){
                 item.setRunning(false);
             }
         }
