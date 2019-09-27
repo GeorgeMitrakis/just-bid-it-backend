@@ -439,6 +439,9 @@ public class DataAccess {
     // /items/{id} resource
     public void updateItem(Item item) throws DataAccessException{
         try{
+            System.out.println( item.getName()+" "+ item.getBuyPrice()+" "+ item.getFirstBid()+" "+ item.getCurrentBid()+" "+ item.getLocation()+" "+
+                    item.getLatitude()+" "+  item.getLongitude()+" "+ item.getCountry()+" "+ item.getEnd()+" "+ item.getDescription()+" "+
+                    item.getId());
             jdbcTemplate.update("update just_bid_it.item " +
                     "set " +
                     "item.name = ? , " +
@@ -452,7 +455,7 @@ public class DataAccess {
                     "item.end = ?, " +
                     "item.description = ? " +
                     "where item.id = ? ",
-                    item.getName(), item.getBuyPrice(), item.getFirstBid(), item.getCurrentBid(), item.getLocation(),
+                    item.getName(), item.getBuyPrice(), item.getFirstBid(), item.getCurrentBid(), item.getLocationName(),
                     item.getLatitude(),  item.getLongitude(), item.getCountry(), item.getEnd(), item.getDescription(),
                     item.getId());
         }
