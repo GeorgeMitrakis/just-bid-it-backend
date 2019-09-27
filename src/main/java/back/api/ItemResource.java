@@ -92,7 +92,7 @@ public class ItemResource extends ServerResource {
             item.setBuyPrice(buyPrice);
             item.setFirstBid(firstBid);
             item.setCurrentBid(firstBid);
-            item.setLocation(location);
+            item.setLocationName(location);
             item.setLatitude(latitude);
             item.setLongitude(longitude);
             item.setCountry(country);

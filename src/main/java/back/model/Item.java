@@ -33,7 +33,7 @@ public class Item {
 //
 //    private Double longitude;
 
-    private Location location;
+    private Location location = new Location();
 
     private String country;
 
@@ -49,22 +49,22 @@ public class Item {
 
 
     public Item(long id,
-			Seller seller,
-			boolean running,
-			String name,
-			List<String> categories,
-			List<Bid> bids,
-			float currentBid,
-			float firstBid,
-            Float buyPrice,
-			int numberOfBids,
-			String location,
-			Double latitude,
-			Double longitude,
-			String country,
-			String start,
-			String end,
-			String description) {
+                Seller seller,
+                boolean running,
+                String name,
+                List<String> categories,
+                List<Bid> bids,
+                float currentBid,
+                float firstBid,
+                Float buyPrice,
+                int numberOfBids,
+                String location,
+                Double latitude,
+                Double longitude,
+                String country,
+                String start,
+                String end,
+                String description) {
         this.id = id;
         this.seller = seller;
         this.running = running;
@@ -78,7 +78,9 @@ public class Item {
 //        this.location = location;
 //        this.latitude = latitude;
 //        this.longitude = longitude;
-        this.location = new Location(location,latitude,longitude);
+        this.location.setName(location);
+        this.location.setLatitude(latitude);
+        this.location.setLongitude(longitude);
         this.country = country;
         this.start = DateTimeParser.parseDateTime(start);
         this.end = DateTimeParser.parseDateTime(end);
@@ -87,19 +89,19 @@ public class Item {
 
     public Item(
             long id,
-			boolean running,
-			String name,
-			List<String> categories,
-			List<Bid> bids,
-			float currentBid,
-			float firstBid,
+            boolean running,
+            String name,
+            List<String> categories,
+            List<Bid> bids,
+            float currentBid,
+            float firstBid,
             Float buyPrice,
-			int numberOfBids,
-			String location,
-			String country,
-			String start,
-			String end,
-			String description) {
+            int numberOfBids,
+            String location,
+            String country,
+            String start,
+            String end,
+            String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -113,7 +115,7 @@ public class Item {
 //        this.location = location;
 //        this.latitude = null;
 //        this.longitude = null;
-        this.location = new Location(location);
+        this.location.setName(location);
         this.country = country;
         this.start = DateTimeParser.parseDateTime(start);
         this.end = DateTimeParser.parseDateTime(end);
@@ -121,21 +123,21 @@ public class Item {
     }
 
     public Item(long id,
-			Seller seller,
-			boolean running,
-			String name,
-			List<String> categories,
-			float currentBid,
-			float firstBid,
-            Float buyPrice,
-			int numberOfBids,
-			String location,
-			Double latitude,
-			Double longitude,
-			String country,
-			String start,
-			String end,
-			String description) {
+                Seller seller,
+                boolean running,
+                String name,
+                List<String> categories,
+                float currentBid,
+                float firstBid,
+                Float buyPrice,
+                int numberOfBids,
+                String location,
+                Double latitude,
+                Double longitude,
+                String country,
+                String start,
+                String end,
+                String description) {
         this.id = id;
         this.seller = seller;
         this.running = running;
@@ -149,7 +151,9 @@ public class Item {
 //        this.location = location;
 //        this.latitude = latitude;
 //        this.longitude = longitude;
-        this.location = new Location(location,latitude,longitude);
+        this.location.setName(location);
+        this.location.setLatitude(latitude);
+        this.location.setLongitude(longitude);
         this.country = country;
         this.start = DateTimeParser.parseDateTime(start);
         this.end = DateTimeParser.parseDateTime(end);
@@ -157,20 +161,20 @@ public class Item {
     }
 
     public Item(long id,
-			boolean running,
-			String name,
-			List<String> categories,
-			float currentBid,
-			float firstBid,
-            Float buyPrice,
-			int numberOfBids,
-			String location,
-			Double latitude,
-			Double longitude,
-			String country,
-			String start,
-			String end,
-			String description) {
+                boolean running,
+                String name,
+                List<String> categories,
+                float currentBid,
+                float firstBid,
+                Float buyPrice,
+                int numberOfBids,
+                String location,
+                Double latitude,
+                Double longitude,
+                String country,
+                String start,
+                String end,
+                String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -184,7 +188,9 @@ public class Item {
 //        this.location = location;
 //        this.latitude = latitude;
 //        this.longitude = longitude;
-        this.location = new Location(location,latitude,longitude);
+        this.location.setName(location);
+        this.location.setLatitude(latitude);
+        this.location.setLongitude(longitude);
         this.country = country;
         this.start = DateTimeParser.parseDateTime(start);
         this.end = DateTimeParser.parseDateTime(end);
@@ -192,18 +198,18 @@ public class Item {
     }
 
     public Item(long id,
-			boolean running,
-			String name,
-			List<String> categories,
-			float currentBid,
-			float firstBid,
-            Float buyPrice,
-			int numberOfBids,
-			String location,
-			String country,
-			String start,
-			String end,
-			String description) {
+                boolean running,
+                String name,
+                List<String> categories,
+                float currentBid,
+                float firstBid,
+                Float buyPrice,
+                int numberOfBids,
+                String location,
+                String country,
+                String start,
+                String end,
+                String description) {
         this.id = id;
         this.seller = null;
         this.running = running;
@@ -217,7 +223,7 @@ public class Item {
 //        this.location = location;
 //        this.latitude = null;
 //        this.longitude = null;
-        this.location = new Location(location);
+        this.location.setName(location);
         this.country = country;
         this.start = DateTimeParser.parseDateTime(start);
         this.end = DateTimeParser.parseDateTime(end);
@@ -264,7 +270,11 @@ public class Item {
         this.buyPrice = buyPrice;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location){
+        this.location = location;
+    }
+
+    public void setLocationName(String location) {
         this.location.setName(location);
     }
 
@@ -345,12 +355,12 @@ public class Item {
     }
 
     @XmlTransient
-    public String getLocation() {
+    public String getLocationName() {
         return location.getName();
     }
 
     @XmlElement(name="Location")
-    public Location getLocationObject(){
+    public Location getLocation(){
         return location;
     }
 

@@ -2,7 +2,9 @@ package back.data.jdbc;
 
 import back.data.Limits;
 import back.data.UserDAO;
+import back.model.Bidder;
 import back.model.CommonUser;
+import back.model.Seller;
 import back.model.User;
 
 import java.sql.SQLException;
@@ -81,4 +83,17 @@ public class UserDAOImpl implements UserDAO {
     public List<String> getUsernamesLike(String username){
         return dataAccess.getUsernamesLike(username);
     }
+
+    @Override
+    public void storeEbaySeller(Seller seller) {
+        dataAccess.storeEbaySeller(seller);
+    }
+
+    @Override
+    public void storeEbayBidder(Bidder bidder) {
+        dataAccess.storeEbayBidder(bidder);
+    }
+
+
+
 }
