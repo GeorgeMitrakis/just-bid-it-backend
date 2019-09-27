@@ -55,7 +55,7 @@ public class Bid {
     }
 
     public void setTime(String time) {
-        this.time = time;
+        this.time = DateTimeParser.parseDateTime(time);
     }
 
     public void setAmount(float amount) {
@@ -74,7 +74,7 @@ public class Bid {
 
     @XmlElement(name="Time")
     public String getTime() {
-        return time;
+        return DateTimeParser.parseDateTime(time);
     }
 
     @XmlElement(name="Amount")

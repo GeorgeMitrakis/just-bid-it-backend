@@ -1,5 +1,6 @@
 package back.data;
 
+import back.model.Bid;
 import back.model.Item;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface ItemDAO {
     void removeCategoryFromItem(Item item, String category);
 
     void deleteItem(long itemId);
+
+    void storeEbayItem(Item item);
 }

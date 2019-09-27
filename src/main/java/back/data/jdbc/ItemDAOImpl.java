@@ -3,6 +3,7 @@ package back.data.jdbc;
 import back.data.ItemDAO;
 import back.data.Limits;
 import back.data.ItemDAO;
+import back.model.Bid;
 import back.model.Item;
 
 import java.util.List;
@@ -83,5 +84,10 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public void deleteItem(long itemId){
         dataAccess.deleteItem(itemId);
+    }
+
+    @Override
+    public void storeEbayItem(Item item){
+        dataAccess.storeEbayItem(item);
     }
 }

@@ -23,8 +23,14 @@ public class BidDAOImpl implements BidDAO {
     public List<Bid> getFullBidsInfoByItemId(long itemId){
         return dataAccess.getFullBidsInfoByItemId(itemId);
     }
+
     @Override
     public void storeBid(Bid bid, long bidderId) {
         dataAccess.storeBid(bid, bidderId);
+    }
+
+    @Override
+    public void storeEbayBid(Bid bid, int itemId){
+        dataAccess.storeEbayBid(bid, itemId);
     }
 }

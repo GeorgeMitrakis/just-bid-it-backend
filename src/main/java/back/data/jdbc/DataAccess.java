@@ -2,6 +2,7 @@ package back.data.jdbc;
 
 import back.api.JsonMapRepresentation;
 import back.model.*;
+import back.util.Hashing;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -342,42 +343,44 @@ public class DataAccess {
     public void storeItem(Item item, long userId){
         try{//try storing the item itself
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            if((item.getLatitude() == null) || (item.getLongitude()==null)){
-                jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,default,default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, userId);
-                    ps.setString(2, item.getName());
-                    ps.setFloat(3, item.getCurrentBid());
-                    ps.setFloat(4, item.getFirstBid());
-                    ps.setFloat(5, item.getBuyPrice());
-                    ps.setInt(6, item.getNumberOfBids());
-                    ps.setString(7, item.getLocation());
-                    ps.setString(8, item.getCountry());
-                    ps.setString(9, item.getStart());
-                    ps.setString(10, item.getEnd());
-                    ps.setString(11, item.getDescription());
-                    return ps;
-                },keyHolder);
-            }
-            else{
-                jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) VALUES (default,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setLong(1, userId);
-                    ps.setString(2, item.getName());
-                    ps.setFloat(3, item.getCurrentBid());
-                    ps.setFloat(4, item.getFirstBid());
-                    ps.setFloat(5, item.getBuyPrice());
-                    ps.setInt(6, item.getNumberOfBids());
-                    ps.setString(7, item.getLocation());
-                    ps.setDouble(8, item.getLatitude());
-                    ps.setDouble(9, item.getLongitude());
-                    ps.setString(10, item.getCountry());
-                    ps.setString(11, item.getStart());
-                    ps.setString(12, item.getEnd());
-                    ps.setString(13, item.getDescription());
-                    return ps;
-                },keyHolder);
-            }
+
+            jdbcTemplate.update(connection -> {
+                int i = 1;
+                String query = "INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) " +
+                        "VALUES (default,?,?,?,?,";
+
+                if(item.getBuyPrice()!=null)
+                    query = query + "?,";
+                else
+                    query = query +"default," ;
+
+                query = query +"?,?," ;
+
+                if(item.getLatitude()!=null && item.getLongitude()!=null)
+                    query = query +"?,?," ;
+                else
+                    query = query +"default,default," ;
+                query = query +"?,?,?,?)";
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+                ps.setLong(i++, userId);
+                ps.setString(i++, item.getName());
+                ps.setFloat(i++, item.getCurrentBid());
+                ps.setFloat(i++, item.getFirstBid());
+                if(item.getBuyPrice()!=null)
+                    ps.setFloat(i++, item.getBuyPrice());
+                ps.setInt(i++, item.getNumberOfBids());
+                ps.setString(i++, item.getLocationName());
+                if(item.getLatitude()!=null && item.getLongitude()!=null){
+                    ps.setDouble(i++, item.getLatitude());
+                    ps.setDouble(i++, item.getLongitude());
+                }
+                ps.setString(i++, item.getCountry());
+                ps.setString(i++, item.getStart());
+                ps.setString(i++, item.getEnd());
+                ps.setString(i++, item.getDescription());
+                return ps;
+            },keyHolder);
 
 
             long id =  keyHolder.getKey().longValue();
@@ -853,5 +856,179 @@ public class DataAccess {
             throw new DataAccessException("could not count messages"){};
         }
 
+    }
+
+    //ebay data
+
+    public void storeEbaySeller(Seller seller) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        try{
+
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement("insert ignore into just_bid_it.user(id, username, password, role, access) VALUES (default,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, seller.getUsername());
+                ps.setString(2, Hashing.getHashSHA256(seller.getUsername()));
+                ps.setString(3, "common user");
+                ps.setString(4, "granted");
+                return ps;
+            },keyHolder);
+
+            long id;
+            if(keyHolder.getKey()!=null){
+                id = keyHolder.getKey().intValue();
+                seller.setId(keyHolder.getKey().intValue());
+            }
+            else{
+                id = jdbcTemplate.queryForObject("select user.id from just_bid_it.user where user.username = ?", Integer.class, seller.getUsername() );
+                seller.setId(id);
+                System.err.println("GREAT");
+            }
+            jdbcTemplate.update("insert ignore into just_bid_it.common_user(id, first_name, last_name, email, phone_number, country, location, tax_registration_number,seller_rating,bidder_rating) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?) " +
+                            "on duplicate key update " +
+                            "seller_rating=?",
+                    id, seller.getUsername(),seller.getUsername(),seller.getUsername()+"@gmail.com",seller.getId(),seller.getUsername(), seller.getUsername(), seller.getId(), seller.getRating(), 0, seller.getRating());
+
+
+        }
+        catch(Exception e) {
+            System.err.println("Failed to insert ebay seller");
+            System.err.println("Seller:"+seller);
+            System.err.println("Seller ID:"+seller.getId());
+            System.err.println("Seller uname:"+seller.getUsername());
+            System.err.println("Seller rating:"+seller.getRating());
+            System.err.println("key:"+keyHolder);
+            System.err.println("key get:"+keyHolder.getKey());
+//            System.err.println("key value:"+keyHolder.getKey().intValue());
+
+            e.printStackTrace();
+            throw new DataAccessException("could not insert ebay seller"){};
+        }
+    }
+
+    public void storeEbayBidder(Bidder bidder) {
+        try{
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement("insert ignore into just_bid_it.user(id, username, password, role, access) VALUES (default,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, bidder.getUsername());
+                ps.setString(2, Hashing.getHashSHA256(bidder.getUsername()));
+                ps.setString(3, "common user");
+                ps.setString(4, "granted");
+                return ps;
+            },keyHolder);
+
+            long id;
+            if(keyHolder.getKey()!=null){
+                id = keyHolder.getKey().intValue();
+                bidder.setId(keyHolder.getKey().intValue());
+            }
+            else{
+                id = jdbcTemplate.queryForObject("select user.id from just_bid_it.user where user.username = ?", Integer.class, bidder.getUsername() );
+                bidder.setId((int) id);
+                System.err.println("GREAT");
+            }
+
+            jdbcTemplate.update("insert into just_bid_it.common_user(id, first_name, last_name, email, phone_number, country, location, tax_registration_number,seller_rating,bidder_rating) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?) " +
+                            "on duplicate key update " +
+                            "country = ?, location = ?, bidder_rating = ?",
+                     id, bidder.getUsername(),bidder.getUsername(),bidder.getUsername()+"@gmail.com", bidder.getId(), bidder.getUsername(), bidder.getUsername(), bidder.getUsername(), 0, bidder.getRating(),
+                    bidder.getCountry(), bidder.getLocation(), bidder.getRating());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to insert ebay bidder");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert ebay bidder"){};
+        }
+    }
+
+    public void storeEbayBid(Bid bid, int itemId){
+        try{
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement("insert into just_bid_it.bid(id, item_id, bidder_id, time, amount) values (default,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, itemId);
+                ps.setInt(2, bid.getBidder().getId());
+                ps.setString(3, bid.getTime());
+                ps.setFloat(4, bid.getAmount());
+                return ps;
+            }, keyHolder);
+
+            bid.setId(keyHolder.getKey().longValue());
+        }
+        catch(Exception e) {
+            System.err.println("Failed to insert ebay bid");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert ebay bid"){};
+        }
+    }
+
+    public void storeEbayItem(Item item){
+        try{//try storing the item itself
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+
+            jdbcTemplate.update(connection -> {
+                int i = 1;
+                String query = "INSERT INTO just_bid_it.item(id, seller_id, name, current_bid, first_bid, buy_price, number_of_bids, location, latitude, longitude, country, start, end, description) " +
+                        "VALUES (?,?,?,?,?,";
+
+                if(item.getBuyPrice()!=null)
+                    query = query + "?,";
+                else
+                    query = query +"default," ;
+
+                query = query +"?,?," ;
+
+                if(item.getLatitude()!=null && item.getLongitude()!=null)
+                    query = query +"?,?," ;
+                else
+                    query = query +"default,default," ;
+                query = query +"?,?,?,?)";
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+                ps.setLong(i++, item.getId());
+                ps.setLong(i++, item.getSeller().getId());
+                ps.setString(i++, item.getName());
+                ps.setFloat(i++, item.getCurrentBid());
+                ps.setFloat(i++, item.getFirstBid());
+                if(item.getBuyPrice()!=null)
+                    ps.setFloat(i++, item.getBuyPrice());
+                ps.setInt(i++, item.getNumberOfBids());
+                ps.setString(i++, item.getLocationName());
+                if(item.getLatitude()!=null && item.getLongitude()!=null){
+                    ps.setDouble(i++, item.getLatitude());
+                    ps.setDouble(i++, item.getLongitude());
+                }
+                ps.setString(i++, item.getCountry());
+                ps.setString(i++, item.getStart());
+                ps.setString(i++, item.getEnd());
+                ps.setString(i++, item.getDescription());
+                return ps;
+            },keyHolder);
+
+        }
+        catch(Exception e) {
+            System.err.println("Failed to insert ebay item");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert ebay item"){};
+        }
+
+
+        try{//try storing its categories
+            long itemId = item.getId();
+            List<String> categories = item.getCategories();
+            for(int i=0; i<categories.size() ; i++){
+                jdbcTemplate.update("INSERT IGNORE INTO just_bid_it.category(id, name) VALUES (default, ?) ",
+                        categories.get(i));
+                jdbcTemplate.update("INSERT INTO just_bid_it.item_categories(item_id, category) VALUES (?, ?) ",
+                        itemId, categories.get(i));
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Failed to store categories");
+            e.printStackTrace();
+            throw new DataAccessException("could not insert categories"){};
+        }
     }
 }

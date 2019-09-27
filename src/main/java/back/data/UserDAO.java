@@ -1,6 +1,8 @@
 package back.data;
 
+import back.model.Bidder;
 import back.model.CommonUser;
+import back.model.Seller;
 import back.model.User;
 
 import java.sql.SQLException;
@@ -32,5 +34,9 @@ public interface UserDAO {
     void denyUserAccess(String username);
 
     List<String> getUsernamesLike(String username);
+
+    void storeEbaySeller(Seller seller);
+
+    void storeEbayBidder(Bidder bidder);
 
 }

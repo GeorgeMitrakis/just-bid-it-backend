@@ -12,4 +12,6 @@ public interface BidDAO {
     List<Bid> getFullBidsInfoByItemId(long itemId);
 
     void storeBid(Bid bid, long bidderId);
+
+    void storeEbayBid(Bid bid, int itemId);
 }

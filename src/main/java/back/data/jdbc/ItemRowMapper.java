@@ -31,7 +31,7 @@ public class ItemRowMapper implements RowMapper<Item>{
         if(currTime.compareTo(rs.getString("end"))>0){//if auction time expired
             isRunning = false;
         }
-        else if(rs.getFloat("current_bid") >= rs.getFloat("buy_price")){//if last bid is greater or equal to buy price
+        else if((rs.getFloat("current_bid") >= rs.getFloat("buy_price"))&&(rs.getFloat("buy_price")!=0)){//if last bid is greater or equal to buy price
             isRunning = false;
         }
         else{
@@ -47,11 +47,11 @@ public class ItemRowMapper implements RowMapper<Item>{
                 this.categories,
                 rs.getFloat("current_bid"),
                 rs.getFloat("first_bid"),
-                rs.getFloat("buy_price"),
+                rs.getFloat("buy_price")!=0 ? rs.getFloat("buy_price"):null,
                 rs.getInt("number_of_bids"),
                 rs.getString("location"),
-                rs.getDouble("latitude"),
-                rs.getDouble("longitude"),
+                rs.getDouble("latitude")!=0.0 ? rs.getDouble("latitude"):null,
+                rs.getDouble("longitude")!=0.0 ? rs.getDouble("longitude"):null,
                 rs.getString("country"),
                 rs.getString("start"),
                 rs.getString("end"),

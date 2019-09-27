@@ -2,8 +2,10 @@ package back.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 public class Bidder {
+    private int id;
     private String username;
     private int rating;
     private String location;
@@ -12,6 +14,14 @@ public class Bidder {
     public Bidder(){}
 
     public Bidder(String username, int rating, String location, String country) {
+        this.username = username;
+        this.rating = rating;
+        this.location = location;
+        this.country = country;
+    }
+
+    public Bidder(int id, String username, int rating, String location, String country) {
+        this.id = id;
         this.username = username;
         this.rating = rating;
         this.location = location;
@@ -34,6 +44,10 @@ public class Bidder {
         this.country = country;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @XmlAttribute(name="UserID")
     public String getUsername() {
         return username;
@@ -52,5 +66,10 @@ public class Bidder {
     @XmlElement(name="Country")
     public String getCountry() {
         return country;
+    }
+
+    @XmlTransient
+    public int getId() {
+        return id;
     }
 }

@@ -20,4 +20,10 @@ public class Items {
     public List<Item> getItems() {
         return items;
     }
+
+    public void addItems(Items items){
+        for (Item i: items.getItems()) {
+            this.items.add(i);
+        }
+    }
 }
