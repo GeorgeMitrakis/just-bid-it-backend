@@ -796,7 +796,7 @@ public class DataAccess {
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text, time) VALUES (default,?,?,?,?,default) ", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO just_bid_it.message(id, sender_id, receiver_id, text, `time`, `read`) VALUES (default,?,?,?,?,default) ", Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, senderId);
                 ps.setInt(2, receiverId);
                 ps.setString(3, message.getText());
