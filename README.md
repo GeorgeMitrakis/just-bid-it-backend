@@ -1,6 +1,6 @@
 # **JustBidIt**
 
-An [ebay.com](https://www.ebay.com/) clone written as a Single Page Web Application using React and a RESTful API implemented in Java.
+An [ebay.com](https://www.ebay.com/) clone written as a Single Page Web Application using React and a RESTful API written in Java, Restlet and Gradle.
 
 It was a group project required for the 'Technologies of Web Applications' University Subject (DIT, NKUA).
 
